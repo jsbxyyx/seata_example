@@ -31,5 +31,10 @@ public class Config {
     public DataSource dataSource(DruidDataSource druidDataSource) {
         return new DataSourceProxy(druidDataSource);
     }
+    
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
 
 }
