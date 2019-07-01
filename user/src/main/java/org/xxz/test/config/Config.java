@@ -27,14 +27,14 @@ public class Config {
         return new DruidDataSource();
     }
 
-    @Bean("dataSource")
-    public DataSource dataSource(DruidDataSource druidDataSource) {
+    @Bean
+    public DataSourceProxy dataSourceProxy(DruidDataSource druidDataSource){
         return new DataSourceProxy(druidDataSource);
     }
-    
+
     @Bean
-    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
+    public JdbcTemplate jdbcTemplate(DataSourceProxy dataSourceProxy) {
+        return new JdbcTemplate(dataSourceProxy);
     }
 
 }
