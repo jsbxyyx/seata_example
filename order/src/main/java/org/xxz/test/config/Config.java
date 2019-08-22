@@ -5,9 +5,8 @@ import io.seata.rm.datasource.DataSourceProxy;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.client.RestTemplate;
-
-import javax.sql.DataSource;
 
 /**
  * @author jsbxyyx

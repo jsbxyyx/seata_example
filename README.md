@@ -2,7 +2,7 @@
 
 1. 执行script目录下的sql
 
-2. 下载seata-server-0.6.0
+2. 下载seata-server
 
 3. 启动seata-server
 

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
+
 /**
  * @author jsbxyyx
  * @since
@@ -11,12 +13,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class OrderRepository {
 
-    static final String insert_sql = "insert into t_order(user_id, amount, create_time) values(?, ?, now())";
+    static final String insert_sql = "insert into t_order(user_id, amount, create_time) values(?, ?, ?)";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
     public int save(int userId, double amount) {
-        return jdbcTemplate.update(insert_sql, new Object[]{userId, amount});
+        return jdbcTemplate.update(insert_sql, new Object[]{userId, amount, new Date()});
     }
 }
