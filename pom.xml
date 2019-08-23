@@ -58,6 +58,16 @@
                 <artifactId>kryo-serializers</artifactId>
                 <version>0.42</version>
             </dependency>
+            <dependency>
+                <groupId>io.protostuff</groupId>
+                <artifactId>protostuff-core</artifactId>
+                <version>1.5.9</version>
+            </dependency>
+            <dependency>
+                <groupId>io.protostuff</groupId>
+                <artifactId>protostuff-runtime</artifactId>
+                <version>1.5.9</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
