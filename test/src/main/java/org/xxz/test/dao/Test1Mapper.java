@@ -10,4 +10,6 @@ public interface Test1Mapper {
 
     int save(Test1Param param);
 
+    int saveOracle(Test1Param param);
+
 }

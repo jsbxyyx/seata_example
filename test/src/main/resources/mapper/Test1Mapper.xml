@@ -3,7 +3,14 @@
 <mapper namespace="org.xxz.test.dao.Test1Mapper">
 
     <insert id="save" parameterType="org.xxz.test.dao.Test1Param">
-        insert into test1(id, name) values(null, #{name1}), (null, #{name2})
+        insert into test1(id, name) values(null, #{name}), (null, #{name2})
+    </insert>
+
+    <insert id="saveOracle" parameterType="org.xxz.test.dao.Test1Param">
+        <selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+            SELECT test_seq.nextval as id from DUAL
+        </selectKey>
+        insert into test(id, name, name2) values(#{id}, #{name}, #{name2})
     </insert>
 
 </mapper>

@@ -22,4 +22,10 @@ public class TestController {
         return "success";
     }
 
+    @RequestMapping("/test2")
+    public String test2() {
+        testService.test2();
+        return "success";
+    }
+
 }
