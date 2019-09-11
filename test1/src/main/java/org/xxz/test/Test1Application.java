@@ -8,10 +8,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since
  */
 @SpringBootApplication(scanBasePackages = {"org.xxz"})
-public class UserApplication {
+public class Test1Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(UserApplication.class, args);
+        SpringApplication.run(Test1Application.class, args);
     }
 
 }

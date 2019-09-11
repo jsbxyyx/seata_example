@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author jsbxyyx
  * @since
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"org.xxz"})
 public class TestApplication {
 
     public static void main(String[] args) {

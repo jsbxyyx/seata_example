@@ -5,6 +5,7 @@ import io.seata.rm.datasource.DataSourceProxy;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,14 +21,16 @@ public class Config {
         return new RestTemplate();
     }
 
-    @Bean(destroyMethod = "close", initMethod = "init")
+    @Primary
+    @Bean
     @ConfigurationProperties(prefix = "spring.datasource")
     public DruidDataSource druidDataSource() {
-        return new DruidDataSource();
+        DruidDataSource druidDataSource = new DruidDataSource();
+        return druidDataSource;
     }
 
     @Bean
-    public DataSourceProxy dataSourceProxy(DruidDataSource druidDataSource){
+    public DataSourceProxy dataSource(DruidDataSource druidDataSource) {
         return new DataSourceProxy(druidDataSource);
     }
 
