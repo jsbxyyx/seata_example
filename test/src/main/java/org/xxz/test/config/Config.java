@@ -2,23 +2,25 @@ package org.xxz.test.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import io.seata.rm.datasource.DataSourceProxy;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.transaction.SpringManagedTransactionFactory;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.client.RestTemplate;
+
 
 /**
  * @author jsbxyyx
  * @since
  */
 @Configuration
-public class Config {
+public class Config implements ApplicationContextAware {
+
+    private ApplicationContext ac;
 
     @Bean
     public RestTemplate restTemplate() {
@@ -27,9 +29,12 @@ public class Config {
 
     @Primary
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource")
     public DruidDataSource druidDataSource() {
         DruidDataSource druidDataSource = new DruidDataSource();
+        Environment env = ac.getEnvironment();
+        druidDataSource.setUrl(env.getProperty("spring.datasource.url"));
+        druidDataSource.setUsername(env.getProperty("spring.datasource.username"));
+        druidDataSource.setPassword(env.getProperty("spring.datasource.password"));
         return druidDataSource;
     }
 
@@ -43,14 +48,8 @@ public class Config {
         return new JdbcTemplate(dataSourceProxy);
     }
 
-    @Bean
-    public SqlSessionFactory sqlSessionFactory(DataSourceProxy dataSourceProxy) throws Exception {
-        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
-        factoryBean.setDataSource(dataSourceProxy);
-        factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
-                .getResources("classpath*:/mapper/*.xml"));
-        factoryBean.setTransactionFactory(new SpringManagedTransactionFactory());
-        return factoryBean.getObject();
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.ac = applicationContext;
     }
-
 }

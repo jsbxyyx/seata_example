@@ -7,9 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.xxz.test.dao.Test1Mapper;
-import org.xxz.test.dao.Test1Param;
+import org.xxz.test.dao.Test1;
+import org.xxz.test.dao.TkMapper;
+import org.xxz.test.dao.TkTest;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author jsbxyyx
@@ -34,7 +38,7 @@ public class TestService {
     @GlobalTransactional
     @Transactional(rollbackFor = Exception.class)
     public void test2() {
-        Test1Param param = new Test1Param();
+        Test1 param = new Test1();
         param.setName("xx");
         param.setName2("xx2");
         test1Mapper.saveOracle(param);
@@ -49,6 +53,17 @@ public class TestService {
     public void test3() {
         jdbcTemplate.update("insert into test values(?, ?, ?)", new Object[]{null, "xx", "xx2"});
         restTemplate.getForObject("http://127.0.0.1:8004/test3", String.class);
+    }
+
+    @Autowired
+    private TkMapper mapper;
+
+    @GlobalTransactional
+    public void test4() {
+        List<TkTest> list = new ArrayList<>();
+        list.add(new TkTest(null, "xx", "xx2"));
+        list.add(new TkTest(null, "yy", "yy2"));
+        mapper.insertList(list);
     }
 
 }

@@ -2,15 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.xxz.test.dao.Test1Mapper">
 
-    <insert id="save" parameterType="org.xxz.test.dao.Test1Param">
+    <insert id="save" parameterType="org.xxz.test.dao.Test1">
         insert into test1(id, name) values(null, #{name}), (null, #{name2})
     </insert>
 
-    <insert id="saveOracle" parameterType="org.xxz.test.dao.Test1Param">
+    <insert id="saveOracle" parameterType="org.xxz.test.dao.Test1">
         <selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
             SELECT test_seq.nextval as id from DUAL
         </selectKey>
         insert into test(id, name, name2) values(#{id}, #{name}, #{name2})
+    </insert>
+
+    <insert id="saveList">
+        insert into test(id, name, name2) values
+        <foreach collection="list" separator="," item="item" index="index">
+            (#{item.id}, #{item.name}, #{item.name2})
+        </foreach>
     </insert>
 
 </mapper>
