@@ -66,5 +66,21 @@ public class TestService {
         mapper.insertList(list);
     }
 
+    @GlobalTransactional
+    public void test5() {
+        List<TkTest> list = new ArrayList<>();
+        list.add(new TkTest(3L, "xxxx", "xxxx2"));
+        list.add(new TkTest(4L, "yyyy", "yyyy2"));
+        mapper.batchUpdate(list);
+    }
+
+    @GlobalTransactional
+    public void test6() {
+        List<Object[]> args = new ArrayList<>();
+        args.add(new Object[]{"xxxx", "xxxx2", 3L});
+        args.add(new Object[]{"yyyy", "yyyy2", 4L});
+        jdbcTemplate.batchUpdate("update tk_test set name = ?, name2 = ? where id = ?", args);
+    }
+
 }
 

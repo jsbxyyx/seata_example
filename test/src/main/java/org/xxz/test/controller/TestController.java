@@ -40,4 +40,16 @@ public class TestController {
         return "success";
     }
 
+    @RequestMapping("/test5")
+    public String test5() {
+        testService.test5();
+        return "success";
+    }
+
+    @RequestMapping("/test6")
+    public String test6() {
+        testService.test6();
+        return "success";
+    }
+
 }
