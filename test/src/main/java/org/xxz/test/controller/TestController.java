@@ -52,4 +52,10 @@ public class TestController {
         return "success";
     }
 
+    @RequestMapping("/test7")
+    public String test7() throws Exception {
+        testService.test7();
+        return "success";
+    }
+
 }

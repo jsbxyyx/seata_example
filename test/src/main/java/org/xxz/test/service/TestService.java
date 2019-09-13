@@ -3,6 +3,9 @@ package org.xxz.test.service;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.support.SqlLobValue;
+import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -12,8 +15,13 @@ import org.xxz.test.dao.TkMapper;
 import org.xxz.test.dao.TkTest;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author jsbxyyx
@@ -21,6 +29,8 @@ import java.util.List;
  */
 @Service
 public class TestService {
+
+    Random r = new Random();
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -82,5 +92,24 @@ public class TestService {
         jdbcTemplate.batchUpdate("update tk_test set name = ?, name2 = ? where id = ?", args);
     }
 
+    @GlobalTransactional
+    public void test7() throws Exception {
+        byte[] bin = "bin".getBytes();
+        String txt = "txt";
+//        jdbcTemplate.update("insert into TEST_BIN(id, name, bin, txt) values(test_bin_seq.nextval, ?, ?, ?)", new Object[]{"xx", bin, txt});
+
+        final File image = new File(System.getProperty("user.dir") + "/test/src/main/java/org/xxz/test/service/TestService.java");
+        final InputStream imageIs = new FileInputStream(image);
+
+        jdbcTemplate.update("update test_bin set name = ?, bin = ?, txt = ? where id = ?",
+                new Object[] {
+                        "xx" + r.nextInt(100),
+                        new SqlLobValue(imageIs, (int)image.length(), new DefaultLobHandler()),
+                        txt,
+                        2
+                },
+                new int[] {Types.VARCHAR, Types.BLOB, Types.CLOB, Types.INTEGER});
+        restTemplate.getForObject("http://127.0.0.1:8004/test1", String.class);
+    }
 }
 

@@ -16,6 +16,12 @@ public class Test1Controller {
     @Autowired
     Test1Service test1Service;
 
+    @RequestMapping("/test1")
+    public String test1() {
+        test1Service.test1();
+        return "success";
+    }
+
     @RequestMapping("/test3")
     public String test3(String xx) {
         test1Service.test3();
