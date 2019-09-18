@@ -53,7 +53,7 @@ public class TestController {
     }
 
     @RequestMapping("/test7")
-    public String test7() {
+    public String test7() throws Exception {
         testService.test7();
         return "success";
     }
@@ -67,6 +67,12 @@ public class TestController {
     @RequestMapping("/test9")
     public String test9() {
         testService.test9();
+        return "success";
+    }
+
+    @RequestMapping("/test10")
+    public String test10() {
+        testService.test10();
         return "success";
     }
 
