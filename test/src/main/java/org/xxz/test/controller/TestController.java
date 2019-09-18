@@ -52,4 +52,22 @@ public class TestController {
         return "success";
     }
 
+    @RequestMapping("/test7")
+    public String test7() {
+        testService.test7();
+        return "success";
+    }
+
+    @RequestMapping("/test8")
+    public String test8() {
+        testService.test8();
+        return "success";
+    }
+
+    @RequestMapping("/test9")
+    public String test9() {
+        testService.test9();
+        return "success";
+    }
+
 }

@@ -13,7 +13,9 @@ import org.xxz.test.dao.TkTest;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author jsbxyyx
@@ -80,6 +82,27 @@ public class TestService {
         args.add(new Object[]{"xxxx", "xxxx2", 3L});
         args.add(new Object[]{"yyyy", "yyyy2", 4L});
         jdbcTemplate.batchUpdate("update tk_test set name = ?, name2 = ? where id = ?", args);
+    }
+
+    @GlobalTransactional
+    public void test7() {
+        String sid = UUID.randomUUID().toString();
+        jdbcTemplate.update("insert into test_escape(`sid`,`param`,`createTime`) values (?, ?, ?)",
+                new Object[]{sid, "a", new Date()});
+    }
+
+    @GlobalTransactional
+    public void test8() {
+        String sid = UUID.randomUUID().toString();
+        jdbcTemplate.update("insert into test_keyword values (?, ?)",
+                new Object[]{sid, "a"});
+    }
+
+    @GlobalTransactional
+    public void test9() {
+        String sid = UUID.randomUUID().toString();
+        jdbcTemplate.update("insert into test_escape(\"sid\",\"param\", \"createTime\") values (?, ?, ?)",
+                new Object[]{sid, "a", new Date()});
     }
 
 }
