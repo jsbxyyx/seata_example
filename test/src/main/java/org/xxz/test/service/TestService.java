@@ -135,5 +135,23 @@ public class TestService {
                 new Object[]{sid, "a", new Date()});
     }
 
+    @GlobalTransactional
+    public void test11() {
+        String sid = UUID.randomUUID().toString();
+        String param = "a";
+        Date createTime = new Date();
+        test1Mapper.save1(sid, param, createTime);
+    }
+
+    @GlobalTransactional
+    public void test12() {
+        String sql = "update test_case set " +
+                "set_value = case id when ? then ? when ? then ? end , " +
+                "updater_id= case id when ? then ? when ? then ? end , " +
+                "update_time=now() " +
+                "where id in ( ? , ?) ";
+        jdbcTemplate.update(sql, new Object[]{1, 2, 3, 4, 1, 2, 3, 4, 1, 3});
+    }
+
 }
 

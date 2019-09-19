@@ -27,10 +27,10 @@ public class TkMybatisConfig {
     }
 
     @Bean
-    public org.mybatis.spring.mapper.MapperScannerConfigurer mapperScannerConfigurer(SqlSessionFactory sqlSessionFactory) {
+    public org.mybatis.spring.mapper.MapperScannerConfigurer mapperScannerConfigurer() {
         org.mybatis.spring.mapper.MapperScannerConfigurer conf = new org.mybatis.spring.mapper.MapperScannerConfigurer();
         conf.setBasePackage("org.xxz.test.dao");
-        conf.setSqlSessionFactory(sqlSessionFactory);
+        conf.setSqlSessionFactoryBeanName("sqlSessionFactory");
         return conf;
     }
 

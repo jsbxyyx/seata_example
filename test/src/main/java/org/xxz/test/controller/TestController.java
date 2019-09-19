@@ -76,4 +76,16 @@ public class TestController {
         return "success";
     }
 
+    @RequestMapping("/test11")
+    public String test11() {
+        testService.test11();
+        return "success";
+    }
+
+    @RequestMapping("/test12")
+    public String test12() {
+        testService.test12();
+        return "success";
+    }
+
 }
