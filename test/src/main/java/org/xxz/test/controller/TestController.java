@@ -88,4 +88,16 @@ public class TestController {
         return "success";
     }
 
+    @RequestMapping("/test13")
+    public String test13() {
+        testService.test13();
+        return "success";
+    }
+
+    @RequestMapping("/test14")
+    public String test14() {
+        testService.test14();
+        return "success";
+    }
+
 }

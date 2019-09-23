@@ -145,12 +145,59 @@ public class TestService {
 
     @GlobalTransactional
     public void test12() {
-        String sql = "update test_case set " +
-                "set_value = case id when ? then ? when ? then ? end , " +
-                "updater_id= case id when ? then ? when ? then ? end , " +
-                "update_time=now() " +
-                "where id in ( ? , ?) ";
-        jdbcTemplate.update(sql, new Object[]{1, 2, 3, 4, 1, 2, 3, 4, 1, 3});
+        String sql = "update test_case " +
+                "set set_value = " +
+                "case id " +
+                "when ? then ? when ? then ? " +
+                "when ? then ? when ? then ? " +
+                "when ? then ? when ? then ? " +
+                "when ? then ? when ? then ? " +
+                "when ? then ? when ? then ? " +
+                "when ? then ? when ? then ? " +
+                "when ? then ? " +
+                "end " +
+                ",updater_id= " +
+                "case id " +
+                "when ? then ? when ? then ? " +
+                "when ? then ? when ? then ? " +
+                "when ? then ? when ? then ? " +
+                "when ? then ? when ? then ? " +
+                "when ? then ? when ? then ? " +
+                "when ? then ? when ? then ? " +
+                "when ? then ? " +
+                "end " +
+                ",update_time=now() " +
+                "where id in ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? )";
+        jdbcTemplate.update(sql, new Object[]{
+                20827, "7", 20828, "false",
+                20829, "0", 12939, "pdf",
+                20830, "true", 20831, "true",
+                20832, "true", 20833, "false",
+                20834, "false", 20835, "s",
+                20836, "s", 14425, "money",
+                20837, "s",
+                20827, 188, 20828, 188,
+                20829, 188, 12939, 188,
+                20830, 188, 20831, 188,
+                20832, 188, 20833, 188,
+                20834, 188, 20835, 188,
+                20836, 188, 14425, 188,
+                20837, 188,
+                20827, 20828, 20829, 12939, 20830, 20831, 20832, 20833, 20834, 20835, 20836, 14425, 20837
+        });
+    }
+
+    @GlobalTransactional
+    @Transactional(rollbackFor = Exception.class)
+    public void test13() {
+        jdbcTemplate.update("insert into test values(null, ?, ?)", new Object[]{"11", "111"});
+        throw new RuntimeException("rollback");
+    }
+
+    @GlobalTransactional
+    public void test14() {
+        test12();
+        restTemplate.getForObject("http://127.0.0.1:8003/test13", String.class);
     }
 
 }
