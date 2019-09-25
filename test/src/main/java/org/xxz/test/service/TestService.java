@@ -1,14 +1,17 @@
 package org.xxz.test.service;
 
 import io.seata.spring.annotation.GlobalTransactional;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.support.SqlLobValue;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
-import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.xxz.test.dao.ProcessTaskConfig;
 import org.xxz.test.dao.Test1Mapper;
 import org.xxz.test.dao.Test1;
 import org.xxz.test.dao.TkMapper;
@@ -198,6 +201,72 @@ public class TestService {
     public void test14() {
         test12();
         restTemplate.getForObject("http://127.0.0.1:8003/test13", String.class);
+    }
+
+    @GlobalTransactional
+    public void test15() {
+        String sid = UUID.randomUUID().toString();
+        jdbcTemplate.update("insert into test_escape(sid,param,createTime) values (?, ?, ?)",
+                new Object[]{sid, "a", new Date()});
+    }
+
+
+    @Autowired
+    SqlSessionFactory sqlSessionFactory;
+
+    @GlobalTransactional
+    public void test16() {
+
+        List<ProcessTaskConfig> task = new ArrayList<>();
+        ProcessTaskConfig pro1 = new ProcessTaskConfig();
+        pro1.setId(UUID.randomUUID().toString().replace("-", ""));
+        pro1.setProcessDefId("928f3e9c2bc94a9fa531a7bb66f47658");
+        pro1.setTaskKey("归档");
+        pro1.setTimeLimit(1.0);
+        pro1.setRapidSubmitType(1);
+        task.add(pro1);
+
+        ProcessTaskConfig pro2 = new ProcessTaskConfig();
+        pro2.setId(UUID.randomUUID().toString().replace("-", ""));
+        pro2.setProcessDefId("928f3e9c2bc94a9fa531a7bb66f47663");
+        pro2.setTaskKey("缮证");
+        pro2.setTimeLimit(2.0);
+        pro2.setRapidSubmitType(2);
+        task.add(pro2);
+
+        SqlSession batchSqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
+        try {
+            int size = task.size();
+            String sqlStatement = "org.xxz.test.dao.ProcessTaskConfigMapper.save";
+
+            for(int i = 0; i < size; ++i) {
+                batchSqlSession.insert(sqlStatement, task.get(i));
+                if (i >= 1 && i % 2 == 0) {
+                    batchSqlSession.flushStatements();
+                }
+            }
+
+            batchSqlSession.flushStatements();
+        } catch (Throwable var15) {
+            throw var15;
+        } finally {
+            if (batchSqlSession != null) {
+                try {
+                    batchSqlSession.close();
+                } catch (Throwable var14) {
+                }
+            }
+
+        }
+
+    }
+
+    @GlobalTransactional
+    public void test17() {
+        List<Object[]> args = new ArrayList<>();
+        args.add(new Object[]{"xx", "yy"});
+        args.add(new Object[]{"xx1", "yy1"});
+        jdbcTemplate.batchUpdate("insert into TEST (ID, name, name2) values (TEST_SEQ.nextval, ?, ?)", args);
     }
 
 }

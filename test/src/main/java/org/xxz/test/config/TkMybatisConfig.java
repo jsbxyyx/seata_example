@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
+import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
@@ -25,6 +26,17 @@ public class TkMybatisConfig {
         factoryBean.setConfiguration(mybatisConfig());
         return factoryBean.getObject();
     }
+
+//    @Bean
+//    public SqlSessionFactory sqlSessionFactory(DataSource dataSourceProxy) throws Exception {
+//        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+//        factoryBean.setDataSource(dataSourceProxy);
+//        factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
+//                .getResources("classpath*:/mapper/*.xml"));
+//        factoryBean.setTransactionFactory(new SpringManagedTransactionFactory());
+//        factoryBean.setConfiguration(mybatisConfig());
+//        return factoryBean.getObject();
+//    }
 
     @Bean
     public org.mybatis.spring.mapper.MapperScannerConfigurer mapperScannerConfigurer() {

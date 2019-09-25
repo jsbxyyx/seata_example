@@ -100,4 +100,22 @@ public class TestController {
         return "success";
     }
 
+    @RequestMapping("/test15")
+    public String test15() {
+        testService.test15();
+        return "success";
+    }
+
+    @RequestMapping("/test16")
+    public String test16() {
+        testService.test16();
+        return "success";
+    }
+
+    @RequestMapping("/test17")
+    public String test17() {
+        testService.test17();
+        return "success";
+    }
+
 }

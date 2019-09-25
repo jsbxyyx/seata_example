@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxz.test.dao.ProcessTaskConfigMapper">
+
+    <insert id="save" parameterType="org.xxz.test.dao.ProcessTaskConfig">
+        INSERT INTO PROCESS_TASK_CONFIG ( ID, PROCESS_DEF_ID, TASK_KEY, TIME_LIMIT, RAPID_SUBMIT_TYPE )
+        VALUES ( #{id}, #{processDefId}, #{taskKey}, #{timeLimit}, #{rapidSubmitType} )
+    </insert>
+
+</mapper>
