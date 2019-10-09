@@ -18,19 +18,19 @@ public class TestController {
 
     @RequestMapping("/test1")
     public String test1() {
-        testService.test1();
+        testService.test1_oracle();
         return "success";
     }
 
     @RequestMapping("/test2")
     public String test2() {
-        testService.test2();
+        testService.test2_oracle();
         return "success";
     }
 
     @RequestMapping("/test3")
     public String test3() {
-        testService.test3();
+        testService.test3_mysql();
         return "success";
     }
 
@@ -60,7 +60,7 @@ public class TestController {
 
     @RequestMapping("/test8")
     public String test8() {
-        testService.test8();
+        testService.test8_mysql();
         return "success";
     }
 
@@ -72,7 +72,7 @@ public class TestController {
 
     @RequestMapping("/test10")
     public String test10() {
-        testService.test10();
+        testService.test10_oracle();
         return "success";
     }
 
@@ -90,7 +90,7 @@ public class TestController {
 
     @RequestMapping("/test13")
     public String test13() {
-        testService.test13();
+        testService.test13_mysql();
         return "success";
     }
 
@@ -102,20 +102,49 @@ public class TestController {
 
     @RequestMapping("/test15")
     public String test15() {
-        testService.test15();
+        testService.test15_mysql();
         return "success";
     }
 
     @RequestMapping("/test16")
     public String test16() {
-        testService.test16();
+        testService.test16_oracle();
         return "success";
     }
 
     @RequestMapping("/test17")
     public String test17() {
-        testService.test17();
+        testService.test17_oracle();
         return "success";
     }
 
+    @RequestMapping("/test18")
+    public String test18() {
+        testService.test18_oracle();
+        return "success";
+    }
+
+    @RequestMapping("/test19")
+    public String test19() {
+        testService.test19_oracle();
+        return "success";
+    }
+
+    @RequestMapping("/test20")
+    public String test20() {
+        testService.test20_oracle();
+        return "success";
+    }
+
+    @RequestMapping("/test21")
+    public String test21() {
+        testService.test21_oracle();
+        return "success";
+    }
+
+    @RequestMapping("/test22")
+    public String test22(Integer cs) {
+        testService.test22_oracle(cs);
+        return "success";
+    }
 }

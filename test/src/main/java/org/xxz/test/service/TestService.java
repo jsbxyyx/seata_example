@@ -4,12 +4,18 @@ import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.support.SqlLobValue;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.xxz.test.dao.ProcessTaskConfig;
 import org.xxz.test.dao.Test1Mapper;
@@ -21,10 +27,13 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -35,6 +44,8 @@ import java.util.UUID;
 @Service
 public class TestService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestService.class);
+
     Random r = new Random();
 
     @Autowired
@@ -42,7 +53,7 @@ public class TestService {
 
     @GlobalTransactional
     @Transactional(rollbackFor = Exception.class)
-    public void test1() {
+    public void test1_oracle() {
         jdbcTemplate.update("insert into test values(test_seq.nextval, ?, ?)", new Object[]{"11", "111"});
         throw new RuntimeException("rollback");
     }
@@ -52,7 +63,7 @@ public class TestService {
 
     @GlobalTransactional
     @Transactional(rollbackFor = Exception.class)
-    public void test2() {
+    public void test2_oracle() {
         Test1 param = new Test1();
         param.setName("xx");
         param.setName2("xx2");
@@ -65,7 +76,7 @@ public class TestService {
 
     @GlobalTransactional
     @Transactional(rollbackFor = Exception.class)
-    public void test3() {
+    public void test3_mysql() {
         jdbcTemplate.update("insert into test values(?, ?, ?)", new Object[]{null, "xx", "xx2"});
         restTemplate.getForObject("http://127.0.0.1:8004/test3", String.class);
     }
@@ -118,7 +129,7 @@ public class TestService {
     }
 
     @GlobalTransactional
-    public void test8() {
+    public void test8_mysql() {
         String sid = UUID.randomUUID().toString();
         jdbcTemplate.update("insert into test_escape(`sid`,`param`,`createTime`) values (?, ?, ?)",
                 new Object[]{sid, "a", new Date()});
@@ -132,7 +143,7 @@ public class TestService {
     }
 
     @GlobalTransactional
-    public void test10() {
+    public void test10_oracle() {
         String sid = UUID.randomUUID().toString();
         jdbcTemplate.update("insert into test_escape(\"sid\",\"param\", \"createTime\") values (?, ?, ?)",
                 new Object[]{sid, "a", new Date()});
@@ -192,7 +203,7 @@ public class TestService {
 
     @GlobalTransactional
     @Transactional(rollbackFor = Exception.class)
-    public void test13() {
+    public void test13_mysql() {
         jdbcTemplate.update("insert into test values(null, ?, ?)", new Object[]{"11", "111"});
         throw new RuntimeException("rollback");
     }
@@ -204,7 +215,7 @@ public class TestService {
     }
 
     @GlobalTransactional
-    public void test15() {
+    public void test15_mysql() {
         String sid = UUID.randomUUID().toString();
         jdbcTemplate.update("insert into test_escape(sid,param,createTime) values (?, ?, ?)",
                 new Object[]{sid, "a", new Date()});
@@ -215,7 +226,7 @@ public class TestService {
     SqlSessionFactory sqlSessionFactory;
 
     @GlobalTransactional
-    public void test16() {
+    public void test16_oracle() {
 
         List<ProcessTaskConfig> task = new ArrayList<>();
         ProcessTaskConfig pro1 = new ProcessTaskConfig();
@@ -262,12 +273,105 @@ public class TestService {
     }
 
     @GlobalTransactional
-    public void test17() {
+    public void test17_oracle() {
         List<Object[]> args = new ArrayList<>();
         args.add(new Object[]{"xx", "yy"});
         args.add(new Object[]{"xx1", "yy1"});
         jdbcTemplate.batchUpdate("insert into TEST (ID, name, name2) values (TEST_SEQ.nextval, ?, ?)", args);
     }
+
+    @GlobalTransactional
+    public void test18_oracle() {
+        List<Object[]> args = new ArrayList<>();
+        args.add(new Object[]{"xx", "yy"});
+        args.add(new Object[]{"xx1", "yy1"});
+        jdbcTemplate.batchUpdate("insert into TEST (name, name2) values (?, ?)", args);
+    }
+
+    @GlobalTransactional
+    public void test19_oracle() {
+        jdbcTemplate.update("insert into TEST (name, name2) values ('xx', 'xx2')");
+    }
+
+
+    @GlobalTransactional
+    public void test20_oracle() {
+        jdbcTemplate.update("insert into TEST (id, name, name2) values (null, 'xx', 'xx2')");
+    }
+
+
+    @GlobalTransactional
+    public void test21_oracle() {
+        String id = UUID.randomUUID().toString();
+//        KeyHolder keyHolder = new GeneratedKeyHolder();
+//        PreparedStatementCreator preparedStatementCreator = null;
+//        preparedStatementCreator = (con) -> {
+//            PreparedStatement ps = con.prepareStatement("insert into test_str(id, name) values (?, ?)");
+//            int i = 1;
+//            ps.setObject(i++, id);
+//            ps.setObject(i++, "xx");
+//            return ps;
+//        };
+//        jdbcTemplate.update(preparedStatementCreator, keyHolder);
+
+        jdbcTemplate.update("insert into TEST_STR(id, name) values (?, ?)", new Object[]{id, "xx"});
+        System.out.println();
+    }
+
+    @GlobalTransactional
+    public void test22_oracle(int cs) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        PreparedStatementCreator preparedStatementCreator = null;
+        switch (cs) {
+            case 1:
+                preparedStatementCreator = (con) -> {
+                    PreparedStatement ps = con.prepareStatement("insert into TEST1(id, name) values (test1_seq.nextval, ?)");
+                    int i = 1;
+                    ps.setObject(i++, "xx");
+                    return ps;
+                };
+                break;
+            case 2:
+                preparedStatementCreator = (con) -> {
+                    PreparedStatement ps = con.prepareStatement("insert into TEST1 values (test1_seq.nextval, ?, ?)");
+                    int i = 1;
+                    ps.setObject(i++, "xx");
+                    ps.setObject(i++, "xx2");
+                    return ps;
+                };
+                break;
+            case 3:
+                preparedStatementCreator = (con) -> {
+                    PreparedStatement ps = con.prepareStatement("insert into test1 (id, name, name2) values" +
+                        "(test_seq.nextval, ?, ?), " +
+                        "(test_seq.nextval, ?, ?)");
+                    int i = 1;
+                    ps.setObject(i++, "11");
+                    ps.setObject(i++, "111");
+                    ps.setObject(i++, "22");
+                    ps.setObject(i++, "222");
+                    return ps;
+                };
+                break;
+                default:
+                    break;
+        }
+
+        jdbcTemplate.update(preparedStatementCreator, keyHolder);
+        List<Map<String, Object>> keyList = keyHolder.getKeyList();
+        LOGGER.info("***********size=[{}]", keyList.size());
+        for (Map<String, Object> key : keyList) {
+            Iterator<Object> iterator = key.values().iterator();
+            while (iterator.hasNext()) {
+                long val = ((Number) iterator.next()).longValue();
+                LOGGER.info("***********[{}]", val);
+                Assert.isTrue(val != 0, "error");
+            }
+        }
+    }
+
+
+
 
 }
 
