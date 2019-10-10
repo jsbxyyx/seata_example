@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -46,6 +47,11 @@ public class Config implements ApplicationContextAware {
     @Bean
     public JdbcTemplate jdbcTemplate(DataSourceProxy dataSourceProxy) {
         return new JdbcTemplate(dataSourceProxy);
+    }
+
+    @Bean
+    public NamedParameterJdbcTemplate namedJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        return new NamedParameterJdbcTemplate(jdbcTemplate);
     }
 
     @Override

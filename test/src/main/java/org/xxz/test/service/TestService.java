@@ -8,7 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.support.SqlLobValue;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -318,48 +319,64 @@ public class TestService {
         System.out.println();
     }
 
+    @Autowired
+    private NamedParameterJdbcTemplate namedJdbcTemplate;
+
     @GlobalTransactional
     public void test22_oracle(int cs) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        PreparedStatementCreator preparedStatementCreator = null;
+        String sql = null;
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
         switch (cs) {
             case 1:
-                preparedStatementCreator = (con) -> {
-                    PreparedStatement ps = con.prepareStatement("insert into TEST1(id, name) values (test1_seq.nextval, ?)");
-                    int i = 1;
-                    ps.setObject(i++, "xx");
-                    return ps;
-                };
+                sql = "insert into TEST1(id, name) values (test1_seq.nextval, :name)";
+                sqlParameterSource.addValue("name", "xx");
                 break;
             case 2:
-                preparedStatementCreator = (con) -> {
-                    PreparedStatement ps = con.prepareStatement("insert into TEST1 values (test1_seq.nextval, ?, ?)");
-                    int i = 1;
-                    ps.setObject(i++, "xx");
-                    ps.setObject(i++, "xx2");
-                    return ps;
-                };
+                sql = "insert into TEST1 values (test1_seq.nextval, :name, :name2)";
+                sqlParameterSource.addValue("name", "xx");
+                sqlParameterSource.addValue("name2", "xx2");
                 break;
-            case 3:
-                preparedStatementCreator = (con) -> {
-                    PreparedStatement ps = con.prepareStatement("insert into test1 (id, name, name2) values" +
-                        "(test_seq.nextval, ?, ?), " +
-                        "(test_seq.nextval, ?, ?)");
-                    int i = 1;
-                    ps.setObject(i++, "11");
-                    ps.setObject(i++, "111");
-                    ps.setObject(i++, "22");
-                    ps.setObject(i++, "222");
-                    return ps;
-                };
+            default:
                 break;
-                default:
-                    break;
         }
 
-        jdbcTemplate.update(preparedStatementCreator, keyHolder);
+        namedJdbcTemplate.update(sql, sqlParameterSource, keyHolder, new String[]{"id"});
         List<Map<String, Object>> keyList = keyHolder.getKeyList();
-        LOGGER.info("***********size=[{}]", keyList.size());
+        Assert.isTrue(keyList.size() > 0, "");
+        for (Map<String, Object> key : keyList) {
+            Iterator<Object> iterator = key.values().iterator();
+            while (iterator.hasNext()) {
+                long val = ((Number) iterator.next()).longValue();
+                LOGGER.info("***********[{}]", val);
+                Assert.isTrue(val != 0, "error");
+            }
+        }
+    }
+
+
+    @GlobalTransactional
+    public void test23_mysql(int cs) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        String sql = null;
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+        switch (cs) {
+            case 1:
+                sql = "insert into test3 (id, name) values (null, :name)";
+                sqlParameterSource.addValue("name", "xx");
+                break;
+            case 2:
+                sql = "insert into test3 values (null, :name, :name2)";
+                sqlParameterSource.addValue("name", "xx");
+                sqlParameterSource.addValue("name2", "xx2");
+                break;
+            default:
+                break;
+        }
+
+        namedJdbcTemplate.update(sql, sqlParameterSource, keyHolder, new String[]{"id"});
+        List<Map<String, Object>> keyList = keyHolder.getKeyList();
+        Assert.isTrue(keyList.size() > 0, "");
         for (Map<String, Object> key : keyList) {
             Iterator<Object> iterator = key.values().iterator();
             while (iterator.hasNext()) {

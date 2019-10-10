@@ -79,3 +79,12 @@ create sequence undo_log_seq;
 /******************** oracle *********************/
 
 
+/*************** mysql **********************/
+create table test3 (
+  id int auto_increment primary key,
+  name varchar(50),
+  name2 varchar(50)
+);
+/*************** mysql **********************/
+
+
