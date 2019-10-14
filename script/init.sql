@@ -76,6 +76,13 @@ CREATE TABLE undo_log (
 create unique index index_ux_undo_log on undo_log (xid, branch_id);
 create sequence undo_log_seq;
 
+create table "test_low" (
+  "id" number(10) primary key,
+  "name" varchar(50)
+);
+create sequence "test_low_seq";
+insert into "test_low" values(2, 'xx');
+
 /******************** oracle *********************/
 
 
@@ -85,6 +92,12 @@ create table test3 (
   name varchar(50),
   name2 varchar(50)
 );
+
+create table `test_low` (
+  `id` int primary key,
+  `name` varchar(50)
+);
+insert into `test_low` values(2, 'xx');
 /*************** mysql **********************/
 
 

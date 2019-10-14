@@ -388,7 +388,70 @@ public class TestService {
     }
 
 
+    @GlobalTransactional
+    public void test24_oracle(Integer cs) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        String sql = null;
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+        switch (cs) {
+            case 1:
+                sql = "insert into \"test_low\" values (1, :name)";
+                sqlParameterSource.addValue("name", "xx");
+                break;
+            case 2:
+                sql = "update \"test_low\" set \"id\" = :nid, \"name\" = :name where \"id\" = :id";
+                sqlParameterSource.addValue("nid", 1000);
+                sqlParameterSource.addValue("name", "yy");
+                sqlParameterSource.addValue("id", 1);
+                break;
+            case 3:
+                sql = "delete from \"test_low\" where \"id\" = :id";
+                sqlParameterSource.addValue("id", 1000);
+                break;
+            case 4:
+                sql = "update \"test_low\" set \"name\" = :nname where \"name\" = :name";
+                sqlParameterSource.addValue("nname", "xx");
+                sqlParameterSource.addValue("name", "xx");
+                break;
+        }
 
+        namedJdbcTemplate.update(sql, sqlParameterSource, keyHolder, new String[]{"id"});
+        List<Map<String, Object>> keyList = keyHolder.getKeyList();
+        LOGGER.info("keyList=[{}]", keyList);
+//        Assert.isTrue(keyList.size() > 0, "");
+    }
 
+    @GlobalTransactional
+    public void test25_mysql(Integer cs) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        String sql = null;
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+        switch (cs) {
+            case 1:
+                sql = "insert into `test_low` values (1, :name)";
+                sqlParameterSource.addValue("name", "xx");
+                break;
+            case 2:
+                sql = "update `test_low` set `id` = :nid, name = :name where `id` = :id";
+                sqlParameterSource.addValue("nid", 1000);
+                sqlParameterSource.addValue("name", "yy");
+                sqlParameterSource.addValue("id", 1);
+                break;
+            case 3:
+                sql = "delete from `test_low` where `id` = :id";
+                sqlParameterSource.addValue("id", 1000);
+                break;
+            case 4:
+                sql = "update `test_low` set `name` = :nname where `name` = :name";
+                sqlParameterSource.addValue("nname", "xx");
+                sqlParameterSource.addValue("name", "xx");
+                break;
+        }
+
+        namedJdbcTemplate.update(sql, sqlParameterSource, keyHolder, new String[]{"id"});
+        List<Map<String, Object>> keyList = keyHolder.getKeyList();
+        LOGGER.info("keyList=[{}]", keyList);
+//        Assert.isTrue(keyList.size() > 0, "");
+    }
 }
 

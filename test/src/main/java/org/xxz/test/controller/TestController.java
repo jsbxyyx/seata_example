@@ -153,4 +153,16 @@ public class TestController {
         testService.test23_mysql(cs);
         return "success";
     }
+
+    @RequestMapping("/test24")
+    public String test24(Integer cs) {
+        testService.test24_oracle(cs);
+        return "success";
+    }
+
+    @RequestMapping("/test25")
+    public String test25(Integer cs) {
+        testService.test25_mysql(cs);
+        return "success";
+    }
 }
