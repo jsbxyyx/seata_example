@@ -2,6 +2,7 @@ package org.xxz.test.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.xxz.test.service.TestService;
 
@@ -65,8 +66,8 @@ public class TestController {
     }
 
     @RequestMapping("/test9")
-    public String test9() {
-        testService.test9();
+    public String test9(@RequestParam(required = false) boolean r) {
+        testService.test9(r);
         return "success";
     }
 

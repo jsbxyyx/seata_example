@@ -137,10 +137,13 @@ public class TestService {
     }
 
     @GlobalTransactional
-    public void test9() {
+    public void test9(boolean r) {
         String sid = UUID.randomUUID().toString();
         jdbcTemplate.update("insert into test_keyword values (?, ?)",
                 new Object[]{sid, "a"});
+        if (r) {
+            throw new RuntimeException("rollback");
+        }
     }
 
     @GlobalTransactional

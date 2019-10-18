@@ -98,6 +98,11 @@ create table `test_low` (
   `name` varchar(50)
 );
 insert into `test_low` values(2, 'xx');
+
+CREATE TABLE test_keyword (
+	`in` VARCHAR(50) primary key,
+	`desc` VARCHAR(50)
+)
 /*************** mysql **********************/
 
 
