@@ -28,7 +28,11 @@ CREATE TABLE `undo_log` (
   UNIQUE KEY `ux_undo_log` (`xid`,`branch_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
-
+CREATE TABLE test_uuid (
+  id VARCHAR(36) NOT NULL,
+  name VARCHAR(45) NULL,
+  PRIMARY KEY (`id`)
+);
 
 /******************* oracle **********************/
 create table test_escape (

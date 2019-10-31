@@ -21,6 +21,8 @@ import org.springframework.web.client.RestTemplate;
 import org.xxz.test.dao.ProcessTaskConfig;
 import org.xxz.test.dao.Test1Mapper;
 import org.xxz.test.dao.Test1;
+import org.xxz.test.dao.TestUuid;
+import org.xxz.test.dao.TestUuidMapper;
 import org.xxz.test.dao.TkMapper;
 import org.xxz.test.dao.TkTest;
 
@@ -136,7 +138,7 @@ public class TestService {
                 new Object[]{sid, "a", new Date()});
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(rollbackFor = {})
     public void test9(boolean r) {
         String sid = UUID.randomUUID().toString();
         jdbcTemplate.update("insert into test_keyword values (?, ?)",
@@ -456,5 +458,37 @@ public class TestService {
         LOGGER.info("keyList=[{}]", keyList);
 //        Assert.isTrue(keyList.size() > 0, "");
     }
+
+    @GlobalTransactional
+    public void test26() {
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+        sqlParameterSource.addValue("id", null);
+        namedJdbcTemplate.update("update test set id = :id where id = :id", sqlParameterSource);
+    }
+
+    @Autowired
+    TestUuidMapper testUuidMapper;
+
+    @GlobalTransactional
+    public void test27() {
+
+        // server db mode branch_table lock_key data too long, update lock_key type to text resolve it.
+
+        List<TestUuid> list = new ArrayList<>();
+        list.add(new TestUuid(UUID.randomUUID().toString(), "xx"));
+        list.add(new TestUuid(UUID.randomUUID().toString(), "xx"));
+        list.add(new TestUuid(UUID.randomUUID().toString(), "xx"));
+        list.add(new TestUuid(UUID.randomUUID().toString(), "xx"));
+        list.add(new TestUuid(UUID.randomUUID().toString(), "xx"));
+        list.add(new TestUuid(UUID.randomUUID().toString(), "xx"));
+        list.add(new TestUuid(UUID.randomUUID().toString(), "xx"));
+        list.add(new TestUuid(UUID.randomUUID().toString(), "xx"));
+        list.add(new TestUuid(UUID.randomUUID().toString(), "xx"));
+        list.add(new TestUuid(UUID.randomUUID().toString(), "xx"));
+        testUuidMapper.batchInsert(list);
+
+        restTemplate.getForObject("http://127.0.0.1:8003/test13", String.class);
+    }
+
 }
 

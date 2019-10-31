@@ -166,4 +166,16 @@ public class TestController {
         testService.test25_mysql(cs);
         return "success";
     }
+
+    @RequestMapping("/test26")
+    public String test26() {
+        testService.test26();
+        return "success";
+    }
+
+    @RequestMapping("/test27")
+    public String test27() {
+        testService.test27();
+        return "success";
+    }
 }
