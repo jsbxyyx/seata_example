@@ -31,7 +31,7 @@ CREATE TABLE `undo_log` (
 CREATE TABLE test_uuid (
   id VARCHAR(36) NOT NULL,
   name VARCHAR(45) NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (id)
 );
 
 /******************* oracle **********************/

@@ -462,8 +462,9 @@ public class TestService {
     @GlobalTransactional
     public void test26() {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        sqlParameterSource.addValue("id", null);
-        namedJdbcTemplate.update("update test set id = :id where id = :id", sqlParameterSource);
+        sqlParameterSource.addValue("nname", null);
+        sqlParameterSource.addValue("oname", null);
+        namedJdbcTemplate.update("update test_uuid set name = :nname where name = :oname", sqlParameterSource);
     }
 
     @Autowired
