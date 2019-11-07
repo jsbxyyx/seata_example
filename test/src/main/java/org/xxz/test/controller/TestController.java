@@ -162,14 +162,14 @@ public class TestController {
     }
 
     @RequestMapping("/test25")
-    public String test25(Integer cs) {
-        testService.test25_mysql(cs);
+    public String test25(Integer c) {
+        testService.test25_mysql(c);
         return "success";
     }
 
     @RequestMapping("/test26")
-    public String test26() {
-        testService.test26();
+    public String test26(@RequestParam(required = false, defaultValue = "0") int c) {
+        testService.test26(c);
         return "success";
     }
 

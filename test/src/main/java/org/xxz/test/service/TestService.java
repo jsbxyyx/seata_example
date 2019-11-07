@@ -427,11 +427,11 @@ public class TestService {
     }
 
     @GlobalTransactional
-    public void test25_mysql(Integer cs) {
+    public void test25_mysql(Integer c) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = null;
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        switch (cs) {
+        switch (c) {
             case 1:
                 sql = "insert into `test_low` values (1, :name)";
                 sqlParameterSource.addValue("name", "xx");
@@ -456,15 +456,25 @@ public class TestService {
         namedJdbcTemplate.update(sql, sqlParameterSource, keyHolder, new String[]{"id"});
         List<Map<String, Object>> keyList = keyHolder.getKeyList();
         LOGGER.info("keyList=[{}]", keyList);
-//        Assert.isTrue(keyList.size() > 0, "");
+        Assert.isTrue(keyList.size() > 0, "");
     }
 
     @GlobalTransactional
-    public void test26() {
-        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        sqlParameterSource.addValue("nname", null);
-        sqlParameterSource.addValue("oname", null);
-        namedJdbcTemplate.update("update test_uuid set name = :nname where name = :oname", sqlParameterSource);
+    public void test26(int c) {
+        switch (c) {
+            case 0:
+                MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+                sqlParameterSource.addValue("nname", null);
+                sqlParameterSource.addValue("oname", null);
+                namedJdbcTemplate.update("update test_uuid set name = :nname where name = :oname", sqlParameterSource);
+                break;
+            case 1:
+                jdbcTemplate.update("update test_uuid set name = null where name = null");
+                break;
+                default:
+                    break;
+        }
+
     }
 
     @Autowired

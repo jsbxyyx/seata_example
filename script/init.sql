@@ -102,6 +102,9 @@ create table `test_low` (
   `name` varchar(50)
 );
 insert into `test_low` values(2, 'xx');
+ALTER TABLE `test_low`
+CHANGE COLUMN `id` `id` INT(11) NOT NULL AUTO_INCREMENT ;
+
 
 CREATE TABLE test_keyword (
 	`in` VARCHAR(50) primary key,
