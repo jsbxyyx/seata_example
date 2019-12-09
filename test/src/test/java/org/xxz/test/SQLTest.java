@@ -20,6 +20,20 @@ public class SQLTest {
             "         update_user=1\n" +
             "        where id = null and available = 1", JdbcConstants.MYSQL);
         System.out.println(sqlStatements);
+
+        List<SQLStatement> sqlStatements1 = SQLUtils.parseStatements(" INSERT ALL " +
+            "INTO T_CARD_BALANCE ( id,card_no,balance,available_amount,frozen_amount,crt_time,up_time ) VALUES ( ?,?,?,?,?,?,? ) " +
+            "INTO T_CARD_BALANCE ( id,card_no,balance,available_amount,frozen_amount,crt_time,up_time ) VALUES ( ?,?,?,?,?,?,? ) " +
+            "INTO T_CARD_BALANCE ( id,card_no,balance,available_amount,frozen_amount,crt_time,up_time ) VALUES ( ?,?,?,?,?,?,? ) " +
+            "INTO T_CARD_BALANCE ( id,card_no,balance,available_amount,frozen_amount,crt_time,up_time ) VALUES ( ?,?,?,?,?,?,? ) " +
+            "INTO T_CARD_BALANCE ( id,card_no,balance,available_amount,frozen_amount,crt_time,up_time ) VALUES ( ?,?,?,?,?,?,? ) " +
+            "INTO T_CARD_BALANCE ( id,card_no,balance,available_amount,frozen_amount,crt_time,up_time ) VALUES ( ?,?,?,?,?,?,? ) " +
+            "INTO T_CARD_BALANCE ( id,card_no,balance,available_amount,frozen_amount,crt_time,up_time ) VALUES ( ?,?,?,?,?,?,? ) " +
+            "INTO T_CARD_BALANCE ( id,card_no,balance,available_amount,frozen_amount,crt_time,up_time ) VALUES ( ?,?,?,?,?,?,? ) " +
+            "INTO T_CARD_BALANCE ( id,card_no,balance,available_amount,frozen_amount,crt_time,up_time ) VALUES ( ?,?,?,?,?,?,? ) " +
+            "INTO T_CARD_BALANCE ( id,card_no,balance,available_amount,frozen_amount,crt_time,up_time ) VALUES ( ?,?,?,?,?,?,? ) " +
+            "SELECT 1 FROM DUAL ", JdbcConstants.ORACLE);
+        System.out.println(sqlStatements1);
     }
 
 }

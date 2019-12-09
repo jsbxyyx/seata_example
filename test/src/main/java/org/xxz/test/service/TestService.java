@@ -497,8 +497,17 @@ public class TestService {
         list.add(new TestUuid(UUID.randomUUID().toString(), "xx"));
         list.add(new TestUuid(UUID.randomUUID().toString(), "xx"));
         testUuidMapper.batchInsert(list);
-
         restTemplate.getForObject("http://127.0.0.1:8003/test13", String.class);
+    }
+
+    @GlobalTransactional
+    public void test28() {
+        MapSqlParameterSource paramSource = new MapSqlParameterSource();
+        paramSource.addValue("created", null);
+        int update = namedJdbcTemplate.update("insert into test_date(created) values(:created)", paramSource);
+        Assert.isTrue(update == 1, "update is " + update);
+        
+        restTemplate.getForObject("http://127.0.0.1:8003/test28", String.class);
     }
 
 }
