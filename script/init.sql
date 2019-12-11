@@ -110,6 +110,15 @@ CREATE TABLE test_keyword (
 	`in` VARCHAR(50) primary key,
 	`desc` VARCHAR(50)
 )
+create table test_escape (
+  `sid` varchar(50) primary key,
+  `param` varchar(50),
+  `createTime` date
+)
+create table test1(
+  id int auto_increment primary key,
+  name varchar(50)
+)
 /*************** mysql **********************/
 
 

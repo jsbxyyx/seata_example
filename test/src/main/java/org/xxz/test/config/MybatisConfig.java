@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
-import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
@@ -28,7 +27,8 @@ public class MybatisConfig implements ApplicationContextAware {
         factoryBean.setConfiguration(mybatisConfig());
 
         // mybatis-plus
-//        com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean factoryBean = new com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean();
+//        com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean factoryBean =
+//            new com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean();
 
         factoryBean.setDataSource(dataSourceProxy);
         factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()

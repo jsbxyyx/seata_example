@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.xxz.test.dao.ProcessTaskConfig;
-import org.xxz.test.dao.Test1Mapper;
 import org.xxz.test.dao.Test1;
+import org.xxz.test.dao.Test1Mapper;
 import org.xxz.test.dao.TestUuid;
 import org.xxz.test.dao.TestUuidMapper;
 import org.xxz.test.dao.TkMapper;
@@ -30,7 +30,6 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
@@ -160,7 +159,8 @@ public class TestService {
         String sid = UUID.randomUUID().toString();
         String param = "a";
         Date createTime = new Date();
-        test1Mapper.save1(sid, param, createTime);
+        int rows = test1Mapper.save1(sid, param, createTime);
+        System.out.println("rows:" + rows);
     }
 
     @GlobalTransactional
@@ -508,6 +508,14 @@ public class TestService {
         Assert.isTrue(update == 1, "update is " + update);
         
         restTemplate.getForObject("http://127.0.0.1:8003/test28", String.class);
+    }
+
+    @GlobalTransactional
+    @Transactional
+    public void test29() {
+        Test1 param = new Test1();
+        int affected = test1Mapper.save(param);
+        System.out.println("affected:" + affected);
     }
 
 }

@@ -184,4 +184,10 @@ public class TestController {
         testService.test28();
         return "success";
     }
+
+    @RequestMapping("/test29")
+    public String test29() {
+        testService.test29();
+        return "success";
+    }
 }
