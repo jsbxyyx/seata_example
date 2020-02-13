@@ -103,7 +103,11 @@
             <version>5.2.0</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.1.4</version>
+        </dependency>
 
         <dependency>
             <groupId>io.seata</groupId>
@@ -113,13 +117,11 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-alibaba-seata</artifactId>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>io.seata</groupId>
-            <artifactId>seata-spring-boot-starter</artifactId>
-            <version>${seata.version}</version>
-        </dependency>
-        -->
+        <!--<dependency>-->
+            <!--<groupId>io.seata</groupId>-->
+            <!--<artifactId>seata-spring-boot-starter</artifactId>-->
+            <!--<version>${seata.version}</version>-->
+        <!--</dependency>-->
 
     </dependencies>
 
