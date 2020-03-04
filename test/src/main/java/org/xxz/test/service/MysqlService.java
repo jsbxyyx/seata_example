@@ -152,4 +152,9 @@ public class MysqlService {
         jdbcTemplate.update(sql, new Object[]{null, "xx"});
     }
 
+    @GlobalTransactional
+    public void test8() {
+        String sql = "insert into test_uuid(id, name) values(uuid(), 'xx')";
+        jdbcTemplate.update(sql);
+    }
 }

@@ -58,4 +58,10 @@ public class MysqlController {
         return "success";
     }
 
+    @RequestMapping("/test8")
+    public String test8() throws Exception {
+        service.test8();
+        return "success";
+    }
+
 }
