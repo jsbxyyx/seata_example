@@ -33,4 +33,12 @@ public class PostgresqlController {
         service.test3();
         return "success";
     }
+
+
+    @RequestMapping("/test4")
+    public String test4() throws Exception {
+        service.test4();
+        return "success";
+    }
+
 }

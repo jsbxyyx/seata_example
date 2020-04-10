@@ -62,4 +62,9 @@ public class PostgresqlService {
         jdbcTemplate.update(sql, "xxx");
     }
 
+    @GlobalTransactional
+    public void test4() {
+        String sql = "insert into test(id) values(nextval('test_seq'))";
+        jdbcTemplate.update(sql);
+    }
 }

@@ -64,4 +64,16 @@ public class MysqlController {
         return "success";
     }
 
+    @RequestMapping("/test9")
+    public String test9() throws Exception {
+        service.test9();
+        return "success";
+    }
+
+    @RequestMapping("/test10")
+    public String test10() throws Exception {
+        service.test10();
+        return "success";
+    }
+
 }
