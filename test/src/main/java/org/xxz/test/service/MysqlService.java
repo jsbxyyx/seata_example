@@ -169,4 +169,10 @@ public class MysqlService {
         String sql = "insert into test1(id) values(?)";
         jdbcTemplate.update(sql, new Object[]{null});
     }
+
+    @GlobalTransactional
+    public void test11() {
+        String sql = "update test1 set id = ? where id = ?; update test1 set id = ? where id = ?;";
+        jdbcTemplate.update(sql, new Object[]{1, 1, 2, 2});
+    }
 }
