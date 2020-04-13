@@ -170,9 +170,33 @@ public class MysqlService {
         jdbcTemplate.update(sql, new Object[]{null});
     }
 
+    /**
+     * multi sql
+     * @param n
+     */
     @GlobalTransactional
-    public void test11() {
-        String sql = "update test1 set id = ? where id = ?; update test1 set id = ? where id = ?;";
-        jdbcTemplate.update(sql, new Object[]{1, 1, 2, 2});
+    public void test11(int n) {
+        switch (n) {
+            case 1:
+                String sql = "update test1 set id = ? where id = ?; update test1 set id = ? where id = ?;";
+                jdbcTemplate.update(sql, new Object[]{1, 1, 2, 2});
+                break;
+            case 2:
+                String sql2 = "update test1 set id = ? where id = ?; update test1 set name = ? where name = ?; update test1 set name = '11';";
+                jdbcTemplate.update(sql2, new Object[]{1, 1, "aa", "aa"});
+                break;
+            case 3:
+                String sql3 = "delete from test1 where id = ?; delete from test1 where name = ?; delete from test1;";
+                jdbcTemplate.update(sql3, new Object[]{1, 1});
+                break;
+            case 4:
+                String sql4 = "update test1 set id = 1 where id = 1; update test1 set name = '11' where name = '11';";
+                jdbcTemplate.update(sql4);
+                break;
+            case 5:
+                String sql5 = "delete from test1 where id = 1; delete from test1 where name = '11';";
+                jdbcTemplate.update(sql5);
+                break;
+        }
     }
 }

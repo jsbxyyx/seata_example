@@ -77,8 +77,8 @@ public class MysqlController {
     }
 
     @RequestMapping("/test11")
-    public String test11() throws Exception {
-        service.test11();
+    public String test11(@RequestParam(required = false, defaultValue = "1") int n) throws Exception {
+        service.test11(n);
         return "success";
     }
 
