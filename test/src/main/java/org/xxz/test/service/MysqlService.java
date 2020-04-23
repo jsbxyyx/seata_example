@@ -225,14 +225,17 @@ public class MysqlService {
             case 4: {
                 String sql = "insert into test1(id, name) values(null, 'xx')";
                 jdbcTemplate.update(sql);
+                break;
             }
             case 5: {
                 String sql = "insert into test1(id, name) values(10002, 'xx'), (10003, 'xx1')";
                 jdbcTemplate.update(sql);
+                break;
             }
             case 6: {
                 String sql = "insert into test1(id, name) values(now(), 'xx')";
                 jdbcTemplate.update(sql);
+                break;
             }
         }
     }

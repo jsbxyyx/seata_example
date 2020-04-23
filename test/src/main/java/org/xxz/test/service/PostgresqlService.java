@@ -157,18 +157,22 @@ public class PostgresqlService {
             case 5: {
                 String sql = "insert into test1(id, name) values(nextval('test1_seq'), 'xx')";
                 jdbcTemplate.update(sql);
+                break;
             }
             case 6: {
                 String sql = "insert into test1(id, name) values(10002, 'xx')";
                 jdbcTemplate.update(sql);
+                break;
             }
             case 7: {
                 String sql = "insert into test1(id, name) values(floor(random()*1000), 'xx')";
                 jdbcTemplate.update(sql);
+                break;
             }
             case 8: {
                 String sql = "insert into test1(id, name) values(default, 'xx')";
                 jdbcTemplate.update(sql);
+                break;
             }
         }
     }

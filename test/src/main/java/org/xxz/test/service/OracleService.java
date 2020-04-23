@@ -262,14 +262,17 @@ public class OracleService {
             case 4: {
                 String sql = "insert into test1(id, name) values(test1_seq.nextval, 'xx')";
                 jdbcTemplate.update(sql);
+                break;
             }
             case 5: {
                 String sql = "insert into test1(id, name) values(10002, 'xx')";
                 jdbcTemplate.update(sql);
+                break;
             }
             case 6: {
                 String sql = "insert into test1(id, name) values(floor(dbms_random.value(900,1000)), 'xx')";
                 jdbcTemplate.update(sql);
+                break;
             }
         }
     }
