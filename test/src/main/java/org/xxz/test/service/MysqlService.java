@@ -3,6 +3,7 @@ package org.xxz.test.service;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -12,9 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
-import org.xxz.test.dao.Test1Mapper;
-import org.xxz.test.dao.TestUuidMapper;
-import org.xxz.test.dao.TkMapper;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -33,21 +31,16 @@ public class MysqlService {
     Random r = new Random();
 
     @Autowired
+    @Qualifier("mysqljdbcTemplate")
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
+    @Qualifier("mysqlnamedJdbcTemplate")
     private NamedParameterJdbcTemplate namedJdbcTemplate;
 
-    @Autowired
-    private Test1Mapper test1Mapper;
 
     @Autowired
-    private TkMapper mapper;
-
-    @Autowired
-    TestUuidMapper testUuidMapper;
-
-    @Autowired
+    @Qualifier("mysqlsqlSessionFactory")
     private SqlSessionFactory sqlSessionFactory;
 
     @Resource
@@ -197,6 +190,50 @@ public class MysqlService {
                 String sql5 = "delete from test1 where id = 1; delete from test1 where name = '11';";
                 jdbcTemplate.update(sql5);
                 break;
+            case 6:
+                String sql6 = "update test1 set name = 'xx1' where name = 'xx'; update test2 set name = 'xx1' where name = 'xx';";
+                jdbcTemplate.update(sql6);
+                break;
+            case 7:
+                String sql7 = "update test1 set name = 'xx2' where name = 'xx1';";
+                jdbcTemplate.update(sql7);
+        }
+    }
+
+    /**
+     * test pkvalues support.
+     */
+    @GlobalTransactional
+    public void test12(int n) throws Exception {
+        jdbcTemplate.update("delete from test1");
+        switch (n) {
+            case 1: {
+                String sql = "insert into test1(id, name) values(null, ?), (null, ?)";
+                jdbcTemplate.update(sql, new Object[]{"xx", "xx"});
+                break;
+            }
+            case 2: {
+                String sql = "insert into test1(id, name) values(10000, ?), (10001, ?)";
+                jdbcTemplate.update(sql, new Object[]{"xx", "xx"});
+                break;
+            }
+            case 3: {
+                String sql = "insert into test1(id, name) values(now(), ?), (now(), ?)";
+                jdbcTemplate.update(sql, new Object[]{"xx", "xx"});
+                break;
+            }
+            case 4: {
+                String sql = "insert into test1(id, name) values(null, 'xx')";
+                jdbcTemplate.update(sql);
+            }
+            case 5: {
+                String sql = "insert into test1(id, name) values(10002, 'xx'), (10003, 'xx1')";
+                jdbcTemplate.update(sql);
+            }
+            case 6: {
+                String sql = "insert into test1(id, name) values(now(), 'xx')";
+                jdbcTemplate.update(sql);
+            }
         }
     }
 }

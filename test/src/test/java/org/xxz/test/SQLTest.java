@@ -62,4 +62,10 @@ public class SQLTest {
         System.out.println(sqlStatements);
     }
 
+    @Test
+    public void mysql_default_keyword() throws Exception {
+        String sql = "insert into test(id, name) values(default, '1')";
+        List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, JdbcConstants.MYSQL);
+        System.out.println(sqlStatements);
+    }
 }

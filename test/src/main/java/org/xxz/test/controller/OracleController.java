@@ -71,14 +71,20 @@ public class OracleController {
     }
 
     @RequestMapping("/test10")
-    public String test10(@RequestParam(required = false, defaultValue = "1") int c) throws Exception {
-        service.test10(c);
+    public String test10(@RequestParam(required = false, defaultValue = "1") int n) throws Exception {
+        service.test10(n);
         return "success";
     }
 
     @RequestMapping("/test11")
-    public String test11(@RequestParam(required = false, defaultValue = "1") int c) throws Exception {
-        service.test11(c);
+    public String test11(@RequestParam(required = false, defaultValue = "1") int n) throws Exception {
+        service.test11(n);
+        return "success";
+    }
+
+    @RequestMapping("/test12")
+    public String test12(@RequestParam(required = false, defaultValue = "1") int n) throws Exception {
+        service.test12(n);
         return "success";
     }
 

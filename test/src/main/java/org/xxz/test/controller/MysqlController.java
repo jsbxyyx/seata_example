@@ -82,4 +82,10 @@ public class MysqlController {
         return "success";
     }
 
+    @RequestMapping("/test12")
+    public String test12(@RequestParam(required = false, defaultValue = "1") int n) throws Exception {
+        service.test12(n);
+        return "success";
+    }
+
 }

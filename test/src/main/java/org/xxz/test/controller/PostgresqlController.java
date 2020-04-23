@@ -36,8 +36,20 @@ public class PostgresqlController {
 
 
     @RequestMapping("/test4")
-    public String test4() throws Exception {
-        service.test4();
+    public String test4(@RequestParam(required = false, defaultValue = "1") int n) throws Exception {
+        service.test4(n);
+        return "success";
+    }
+
+    @RequestMapping("/test5")
+    public String test5(@RequestParam(required = false, defaultValue = "1") int n) throws Exception {
+        service.test5(n);
+        return "success";
+    }
+
+    @RequestMapping("/test6")
+    public String test6(@RequestParam(required = false, defaultValue = "1") int n) {
+        service.test6(n);
         return "success";
     }
 

@@ -5,6 +5,7 @@ import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -17,8 +18,6 @@ import org.springframework.web.client.RestTemplate;
 import org.xxz.test.dao.ProcessTaskConfig;
 import org.xxz.test.dao.Test1;
 import org.xxz.test.dao.Test1Mapper;
-import org.xxz.test.dao.TestUuidMapper;
-import org.xxz.test.dao.TkMapper;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -38,21 +37,15 @@ public class OracleService {
     Random r = new Random();
 
     @Autowired
+    @Qualifier("oraclejdbcTemplate")
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
+    @Qualifier("oraclenamedJdbcTemplate")
     private NamedParameterJdbcTemplate namedJdbcTemplate;
 
     @Autowired
-    private Test1Mapper test1Mapper;
-
-    @Autowired
-    private TkMapper mapper;
-
-    @Autowired
-    TestUuidMapper testUuidMapper;
-
-    @Autowired
+    @Qualifier("oraclesqlSessionFactory")
     private SqlSessionFactory sqlSessionFactory;
 
     @Resource
@@ -71,6 +64,7 @@ public class OracleService {
         Test1 param = new Test1();
         param.setName("xx");
         param.setName2("xx2");
+        Test1Mapper test1Mapper = sqlSessionFactory.openSession().getMapper(Test1Mapper.class);
         test1Mapper.saveOracle(param);
         System.out.println(String.format("id=%s", param.getId()));
     }
@@ -238,5 +232,45 @@ public class OracleService {
         List<Map<String, Object>> keyList = keyHolder.getKeyList();
         System.out.printf("keyList=[%s]\n", keyList);
 //        Assert.isTrue(keyList.size() > 0, "");
+    }
+
+    /**
+     * test pkvalues support.
+     * @param n
+     */
+    @GlobalTransactional
+    public void test12(int n) {
+        // select SEQUENCE_OWNER, SEQUENCE_NAME from dba_sequences where sequence_owner = '用户名';
+        // sequence_owner必须为大写，不管你的用户名是否大写。只有大写才能识别。
+        jdbcTemplate.update("delete from test1");
+        switch (n) {
+            case 1: {
+                String sql = "insert into test1(id, name) values(test1_seq.nextval, ?), (test1_seq.nextval, ?)";
+                jdbcTemplate.update(sql, new Object[]{"xx", "xx"});
+                break;
+            }
+            case 2: {
+                String sql = "insert into test1(id, name) values(10000, ?), (10001, ?)";
+                jdbcTemplate.update(sql, new Object[]{"xx", "xx"});
+                break;
+            }
+            case 3: {
+                String sql = "insert into test1(id, name) values(floor(dbms_random.value(900,1000)), ?), (floor(dbms_random.value(900,1000)), ?)";
+                jdbcTemplate.update(sql, new Object[]{"xx", "xx"});
+                break;
+            }
+            case 4: {
+                String sql = "insert into test1(id, name) values(test1_seq.nextval, 'xx')";
+                jdbcTemplate.update(sql);
+            }
+            case 5: {
+                String sql = "insert into test1(id, name) values(10002, 'xx')";
+                jdbcTemplate.update(sql);
+            }
+            case 6: {
+                String sql = "insert into test1(id, name) values(floor(dbms_random.value(900,1000)), 'xx')";
+                jdbcTemplate.update(sql);
+            }
+        }
     }
 }

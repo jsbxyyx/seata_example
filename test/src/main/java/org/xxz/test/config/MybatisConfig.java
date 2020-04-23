@@ -5,11 +5,14 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.transaction.SpringManagedTransactionFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import java.util.Properties;
@@ -20,8 +23,9 @@ public class MybatisConfig implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
-    @Bean
-    public SqlSessionFactory sqlSessionFactory(DataSourceProxy dataSourceProxy) throws Exception {
+    @Primary
+    @Bean("mysqlsqlSessionFactory")
+    public SqlSessionFactory mysqlsqlSessionFactory(@Autowired @Qualifier("mysqldsp") DataSourceProxy dataSourceProxy) throws Exception {
         // tk mybatis
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setConfiguration(mybatisConfig());
@@ -29,6 +33,32 @@ public class MybatisConfig implements ApplicationContextAware {
         // mybatis-plus
 //        com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean factoryBean =
 //            new com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean();
+
+        factoryBean.setDataSource(dataSourceProxy);
+        factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
+                .getResources("classpath*:/mapper/*.xml"));
+        factoryBean.setTransactionFactory(new SpringManagedTransactionFactory());
+        return factoryBean.getObject();
+    }
+
+    @Bean("oraclesqlSessionFactory")
+    public SqlSessionFactory oraclesqlSessionFactory(@Autowired @Qualifier("oracledsp") DataSourceProxy dataSourceProxy) throws Exception {
+        // tk mybatis
+        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+        factoryBean.setConfiguration(mybatisConfig());
+
+        factoryBean.setDataSource(dataSourceProxy);
+        factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
+                .getResources("classpath*:/mapper/*.xml"));
+        factoryBean.setTransactionFactory(new SpringManagedTransactionFactory());
+        return factoryBean.getObject();
+    }
+
+    @Bean("postgresqlsqlSessionFactory")
+    public SqlSessionFactory postgresqlsqlSessionFactory(@Autowired @Qualifier("postgresqldsp") DataSourceProxy dataSourceProxy) throws Exception {
+        // tk mybatis
+        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+        factoryBean.setConfiguration(mybatisConfig());
 
         factoryBean.setDataSource(dataSourceProxy);
         factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
@@ -48,12 +78,30 @@ public class MybatisConfig implements ApplicationContextAware {
 //        return factoryBean.getObject();
 //    }
 
-    @Bean
-    public org.mybatis.spring.mapper.MapperScannerConfigurer mapperScannerConfigurer() {
+    @Bean("mysqlmapperScannerConfigurer")
+    public org.mybatis.spring.mapper.MapperScannerConfigurer mysqlmapperScannerConfigurer() {
         org.mybatis.spring.mapper.MapperScannerConfigurer conf = new org.mybatis.spring.mapper.MapperScannerConfigurer();
         String basePackage = applicationContext.getEnvironment().getProperty("mybatis.mapper.basePackage");
         conf.setBasePackage(basePackage);
-        conf.setSqlSessionFactoryBeanName("sqlSessionFactory");
+        conf.setSqlSessionFactoryBeanName("mysqlsqlSessionFactory");
+        return conf;
+    }
+
+    @Bean("oraclemapperScannerConfigurer")
+    public org.mybatis.spring.mapper.MapperScannerConfigurer oraclemapperScannerConfigurer() {
+        org.mybatis.spring.mapper.MapperScannerConfigurer conf = new org.mybatis.spring.mapper.MapperScannerConfigurer();
+        String basePackage = applicationContext.getEnvironment().getProperty("mybatis.mapper.basePackage");
+        conf.setBasePackage(basePackage);
+        conf.setSqlSessionFactoryBeanName("mysqlsqlSessionFactory");
+        return conf;
+    }
+
+    @Bean("postgresqlmapperScannerConfigurer")
+    public org.mybatis.spring.mapper.MapperScannerConfigurer postgresqlmapperScannerConfigurer() {
+        org.mybatis.spring.mapper.MapperScannerConfigurer conf = new org.mybatis.spring.mapper.MapperScannerConfigurer();
+        String basePackage = applicationContext.getEnvironment().getProperty("mybatis.mapper.basePackage");
+        conf.setBasePackage(basePackage);
+        conf.setSqlSessionFactoryBeanName("mysqlsqlSessionFactory");
         return conf;
     }
 
