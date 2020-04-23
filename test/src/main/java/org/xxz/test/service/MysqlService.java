@@ -218,7 +218,7 @@ public class MysqlService {
                 break;
             }
             case 3: {
-                String sql = "insert into test1(id, name) values(now(), ?), (now(), ?)";
+                String sql = "insert into test1(id, name) values(floor(now() + 1), ?), (floor(now() + 2), ?)";
                 jdbcTemplate.update(sql, new Object[]{"xx", "xx"});
                 break;
             }
@@ -233,6 +233,7 @@ public class MysqlService {
                 break;
             }
             case 6: {
+                // not support
                 String sql = "insert into test1(id, name) values(now(), 'xx')";
                 jdbcTemplate.update(sql);
                 break;

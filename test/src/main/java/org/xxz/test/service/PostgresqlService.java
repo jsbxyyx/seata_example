@@ -165,6 +165,7 @@ public class PostgresqlService {
                 break;
             }
             case 7: {
+                // not support.
                 String sql = "insert into test1(id, name) values(floor(random()*1000), 'xx')";
                 jdbcTemplate.update(sql);
                 break;

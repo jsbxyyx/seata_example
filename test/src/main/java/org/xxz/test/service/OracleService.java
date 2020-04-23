@@ -245,17 +245,17 @@ public class OracleService {
         jdbcTemplate.update("delete from test1");
         switch (n) {
             case 1: {
-                String sql = "insert into test1(id, name) values(test1_seq.nextval, ?), (test1_seq.nextval, ?)";
+                String sql = "insert into test1(id, name) values(test1_seq.nextval, ?)";
                 jdbcTemplate.update(sql, new Object[]{"xx", "xx"});
                 break;
             }
             case 2: {
-                String sql = "insert into test1(id, name) values(10000, ?), (10001, ?)";
+                String sql = "insert into test1(id, name) values(10000, ?)";
                 jdbcTemplate.update(sql, new Object[]{"xx", "xx"});
                 break;
             }
             case 3: {
-                String sql = "insert into test1(id, name) values(floor(dbms_random.value(900,1000)), ?), (floor(dbms_random.value(900,1000)), ?)";
+                String sql = "insert into test1(id, name) values(floor(dbms_random.value(900,1000)), ?)";
                 jdbcTemplate.update(sql, new Object[]{"xx", "xx"});
                 break;
             }
@@ -270,6 +270,7 @@ public class OracleService {
                 break;
             }
             case 6: {
+                // not support.
                 String sql = "insert into test1(id, name) values(floor(dbms_random.value(900,1000)), 'xx')";
                 jdbcTemplate.update(sql);
                 break;
