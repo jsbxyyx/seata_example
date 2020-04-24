@@ -160,7 +160,7 @@ public class PostgresqlService {
                 break;
             }
             case 6: {
-                String sql = "insert into test1(id, name) values(10002, 'xx')";
+                String sql = "insert into test1(id, name) values(10002, 'xx'), (10003, 'xx1')";
                 jdbcTemplate.update(sql);
                 break;
             }
