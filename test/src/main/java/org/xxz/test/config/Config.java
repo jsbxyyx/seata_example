@@ -34,10 +34,7 @@ public class Config implements ApplicationContextAware {
     @Bean("mysqlds")
     public DruidDataSource mysqlds() {
         DruidDataSource druidDataSource = new DruidDataSource();
-        Environment env = ac.getEnvironment();
-        druidDataSource.setUrl(env.getProperty("spring.datasource.mysql.url"));
-        druidDataSource.setUsername(env.getProperty("spring.datasource.mysql.username"));
-        druidDataSource.setPassword(env.getProperty("spring.datasource.mysql.password"));
+        setDruidDataSourceProperties(druidDataSource, "mysql");
         return druidDataSource;
     }
 
@@ -62,9 +59,7 @@ public class Config implements ApplicationContextAware {
     public DruidDataSource oracleds() {
         DruidDataSource druidDataSource = new DruidDataSource();
         Environment env = ac.getEnvironment();
-        druidDataSource.setUrl(env.getProperty("spring.datasource.oracle.url"));
-        druidDataSource.setUsername(env.getProperty("spring.datasource.oracle.username"));
-        druidDataSource.setPassword(env.getProperty("spring.datasource.oracle.password"));
+        setDruidDataSourceProperties(druidDataSource, "oracle");
         return druidDataSource;
     }
 
@@ -87,9 +82,7 @@ public class Config implements ApplicationContextAware {
     public DruidDataSource postgresqlds() {
         DruidDataSource druidDataSource = new DruidDataSource();
         Environment env = ac.getEnvironment();
-        druidDataSource.setUrl(env.getProperty("spring.datasource.postgresql.url"));
-        druidDataSource.setUsername(env.getProperty("spring.datasource.postgresql.username"));
-        druidDataSource.setPassword(env.getProperty("spring.datasource.postgresql.password"));
+        setDruidDataSourceProperties(druidDataSource, "postgresql");
         return druidDataSource;
     }
 
@@ -111,5 +104,13 @@ public class Config implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.ac = applicationContext;
+    }
+
+    private void setDruidDataSourceProperties(DruidDataSource druidDataSource, String ds) {
+        Environment env = ac.getEnvironment();
+        druidDataSource.setUrl(env.getProperty("spring.datasource." + ds + ".url"));
+        druidDataSource.setUsername(env.getProperty("spring.datasource." + ds + ".username"));
+        druidDataSource.setPassword(env.getProperty("spring.datasource." + ds + ".password"));
+        druidDataSource.setDriverClassName(env.getProperty("spring.datasource." + ds + ".driver-class-name"));
     }
 }

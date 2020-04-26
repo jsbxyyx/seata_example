@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <!-- 记录连接打开、关闭等信息，有利于调试数据库连接相关问题 -->
+    <logger name="jdbc.connection" additivity="false" level="OFF">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </logger>
+    <!-- 会产生更多的记录信息，因为记录了 ResultSet 的信息 -->
+    <logger name="jdbc.resultset" additivity="false" level="OFF">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </logger>
+    <!-- 记录除了 ResultSet 之外的所有 JDBC 调用信息，会产生大量的记录，有利于调试跟踪具体的 JDBC 问题 -->
+    <logger name="jdbc.audit" additivity="false" level="OFF">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </logger>
+    <!-- 仅记录SQL -->
+    <logger name="jdbc.sqlonly" additivity="false" level="OFF">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </logger>
+    <!-- 记录SQL以及耗时信息 -->
+    <logger name="jdbc.sqltiming" additivity="false" level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </logger>
+</configuration>
