@@ -1,4 +1,6 @@
-package net.sf.log4jdbc;
+package net.sf.log4jdbc.extension;
+
+import net.sf.log4jdbc.DriverSpy;
 
 import java.sql.SQLException;
 
