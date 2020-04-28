@@ -240,4 +240,18 @@ public class MysqlService {
             }
         }
     }
+
+    @GlobalTransactional
+    public void test13(int n) {
+        switch (n) {
+            case 1: {
+                String sql = "delete a from test1 a where a.id = ?";
+                jdbcTemplate.update(sql, new Object[]{1});
+            }
+            case 2: {
+                String sql = "delete from test1 where id = ?";
+                jdbcTemplate.update(sql, new Object[]{1});
+            }
+        }
+    }
 }

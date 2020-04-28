@@ -68,4 +68,15 @@ public class SQLTest {
         List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, JdbcConstants.MYSQL);
         System.out.println(sqlStatements);
     }
+
+    @Test
+    public void mysql_delete_alias() {
+        String sql = "delete a from test1 as a where a.id = ?";
+        List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, JdbcConstants.MYSQL);
+        System.out.println(sqlStatements);
+
+        sql = "delete t1 from test1 as t1 where t1.id = (select id from test2 t2 where t2.id = ?)";
+        sqlStatements = SQLUtils.parseStatements(sql, JdbcConstants.MYSQL);
+        System.out.println(sqlStatements);
+    }
 }

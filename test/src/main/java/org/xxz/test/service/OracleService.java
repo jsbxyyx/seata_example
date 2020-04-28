@@ -277,4 +277,18 @@ public class OracleService {
             }
         }
     }
+
+    @GlobalTransactional
+    public void test13(int n) {
+        switch (n) {
+            case 1: {
+                String sql = "delete from test1 t1 where t1.id = ?";
+                jdbcTemplate.update(sql, new Object[]{10002});
+            }
+            case 2: {
+                String sql = "delete from test1 where id = ?";
+                jdbcTemplate.update(sql, new Object[]{10003});
+            }
+        }
+    }
 }

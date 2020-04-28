@@ -53,4 +53,10 @@ public class PostgresqlController {
         return "success";
     }
 
+    @RequestMapping("/test7")
+    public String test7(@RequestParam(required = false, defaultValue = "1") int n) {
+        service.test7(n);
+        return "success";
+    }
+
 }
