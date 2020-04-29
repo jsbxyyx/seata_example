@@ -41,6 +41,10 @@ public class OracleService {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
+    @Qualifier("oraclejdbcTemplateo")
+    private JdbcTemplate jdbcTemplateo;
+
+    @Autowired
     @Qualifier("oraclenamedJdbcTemplate")
     private NamedParameterJdbcTemplate namedJdbcTemplate;
 

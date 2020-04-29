@@ -59,4 +59,10 @@ public class PostgresqlController {
         return "success";
     }
 
+    @RequestMapping("/test8")
+    public String test8(@RequestParam(required = false, defaultValue = "1") int n) {
+        service.test8(n);
+        return "success";
+    }
+
 }

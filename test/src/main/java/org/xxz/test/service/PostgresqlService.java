@@ -14,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.sql.PreparedStatement;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -28,6 +30,10 @@ public class PostgresqlService {
     @Autowired
     @Qualifier("postgresqljdbcTemplate")
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    @Qualifier("postgresqljdbcTemplateo")
+    private JdbcTemplate jdbcTemplateo;
 
     @Autowired
     @Qualifier("postgresqlnamedJdbcTemplate")
@@ -188,6 +194,21 @@ public class PostgresqlService {
             case 2: {
                 String sql = "delete from test1 where id = ?";
                 jdbcTemplate.update(sql, new Object[]{10003});
+            }
+        }
+    }
+
+    public void test8(int n) {
+        switch (n) {
+            case 1: {
+                String sql = "select name from test1 where name like concat('%', ?)";
+                List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql, new Object[]{"xx"});
+                System.out.println(maps);
+            }
+            case 2: {
+                String sql = "select name from test1 where name like concat('%', ?)";
+                List<Map<String, Object>> maps = jdbcTemplateo.queryForList(sql, new Object[]{"xx"});
+                System.out.println(maps);
             }
         }
     }

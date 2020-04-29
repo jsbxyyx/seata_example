@@ -15,6 +15,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.client.RestTemplate;
 
+import javax.sql.DataSource;
+
 
 /**
  * @author jsbxyyx
@@ -49,6 +51,11 @@ public class Config implements ApplicationContextAware {
         return new JdbcTemplate(dataSourceProxy);
     }
 
+    @Bean("mysqljdbcTemplateo")
+    public JdbcTemplate mysqljdbcTemplateo(@Autowired @Qualifier("mysqlds") DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
+
     @Primary
     @Bean("mysqlnamedJdbcTemplate")
     public NamedParameterJdbcTemplate mysqlnamedJdbcTemplate(@Autowired @Qualifier("mysqljdbcTemplate") JdbcTemplate jdbcTemplate) {
@@ -73,6 +80,11 @@ public class Config implements ApplicationContextAware {
         return new JdbcTemplate(dataSourceProxy);
     }
 
+    @Bean("oraclejdbcTemplateo")
+    public JdbcTemplate oraclejdbcTemplateo(@Autowired @Qualifier("oracleds") DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
+
     @Bean("oraclenamedJdbcTemplate")
     public NamedParameterJdbcTemplate oraclenamedJdbcTemplate(@Autowired @Qualifier("oraclejdbcTemplate") JdbcTemplate jdbcTemplate) {
         return new NamedParameterJdbcTemplate(jdbcTemplate);
@@ -94,6 +106,11 @@ public class Config implements ApplicationContextAware {
     @Bean("postgresqljdbcTemplate")
     public JdbcTemplate postgresqljdbcTemplate(@Autowired @Qualifier("postgresqldsp") DataSourceProxy dataSourceProxy) {
         return new JdbcTemplate(dataSourceProxy);
+    }
+
+    @Bean("postgresqljdbcTemplateo")
+    public JdbcTemplate postgresqljdbcTemplateo(@Autowired @Qualifier("postgresqlds") DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
 
     @Bean("postgresqlnamedJdbcTemplate")
