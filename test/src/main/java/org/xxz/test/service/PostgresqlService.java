@@ -210,6 +210,11 @@ public class PostgresqlService {
                 List<Map<String, Object>> maps = jdbcTemplateo.queryForList(sql, new Object[]{"xx"});
                 System.out.println(maps);
             }
+            case 3: {
+                String sql = "select name from test1 where name like ?";
+                List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql, new Object[]{"%xx%"});
+                System.out.println(maps);
+            }
         }
     }
 }
