@@ -55,6 +55,9 @@ public class OracleService {
     @Resource
     private RestTemplate restTemplate;
 
+    @Resource
+    private CommonService commonService;
+
     @GlobalTransactional
     @Transactional(rollbackFor = Exception.class)
     public void test1() {

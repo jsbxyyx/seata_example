@@ -20,4 +20,11 @@
         </foreach>
     </insert>
 
+    <insert id="testLastInsertId" parameterType="org.xxz.test.dao.Test1">
+        <selectKey resultType="long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into test1(id, name) values(null, #{name})
+    </insert>
+
 </mapper>

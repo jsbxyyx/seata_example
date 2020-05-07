@@ -46,6 +46,9 @@ public class PostgresqlService {
     @Resource
     private RestTemplate restTemplate;
 
+    @Resource
+    private CommonService commonService;
+
     @GlobalTransactional
     public void test1() {
         String sql = "insert into test_uuid values(?, ?)";

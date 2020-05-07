@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
+import org.xxz.test.dao.Test1;
+import org.xxz.test.dao.Test1Mapper;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -49,6 +51,9 @@ public class MysqlService {
 
     @Resource
     private RestTemplate restTemplate;
+
+    @Resource
+    private CommonService commonService;
 
     @GlobalTransactional
     @Transactional(rollbackFor = Exception.class)
@@ -257,5 +262,44 @@ public class MysqlService {
                 jdbcTemplate.update(sql, new Object[]{1});
             }
         }
+    }
+
+    @GlobalTransactional
+    public void test14(int n) {
+        switch (n) {
+            case 1: {
+                String sql = "update test1 set id = id, name = ? where id = ?";
+                jdbcTemplate.update(sql, new Object[]{"xx", 1});
+                break;
+            }
+            case 2: {
+                String sql = "update test1 set id = id, name = 'xx' where id = 1";
+                jdbcTemplate.update(sql);
+                break;
+            }
+            case 3: {
+                try {
+                    String sql = "update test1 set id = id, name = 'xx' where id = 1";
+                    jdbcTemplate.update(sql);
+                    int i = 1 / 0;
+                } catch (Exception e) {}
+                break;
+            }
+            case 4: {
+                String sql = "update test1 set id = id, name = 'xx' where id = 1";
+                jdbcTemplate.update(sql);
+                int i = 1 / 0;
+                break;
+            }
+        }
+    }
+
+    @GlobalTransactional
+    public void test15(int n) {
+        Test1Mapper mapper = sqlSessionFactory.openSession().getMapper(Test1Mapper.class);
+        Test1 test1 = new Test1();
+        test1.setName("xxx");
+        mapper.testLastInsertId(test1);
+        System.out.println(test1);
     }
 }

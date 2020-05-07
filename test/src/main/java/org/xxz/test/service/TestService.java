@@ -60,6 +60,9 @@ public class TestService {
     @Resource
     private RestTemplate restTemplate;
 
+    @Resource
+    private CommonService commonService;
+
     @GlobalTransactional
     public void test1() {
         List<TkTest> list = new ArrayList<>();

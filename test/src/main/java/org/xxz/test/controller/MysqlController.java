@@ -94,4 +94,16 @@ public class MysqlController {
         return "success";
     }
 
+    @RequestMapping("/test14")
+    public String test14(@RequestParam(required = false, defaultValue = "1") int n) throws Exception {
+        service.test14(n);
+        return "success";
+    }
+
+    @RequestMapping("/test15")
+    public String test15(@RequestParam(required = false, defaultValue = "1") int n) throws Exception {
+        service.test15(n);
+        return "success";
+    }
+
 }

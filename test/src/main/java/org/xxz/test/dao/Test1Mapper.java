@@ -22,4 +22,6 @@ public interface Test1Mapper {
     @Insert("insert into test_escape values(#{sid}, #{param}, #{createTime})")
     int save1(@Param("sid") String sid, @Param("param") String param, @Param("createTime") Date createTime);
 
+    int testLastInsertId(Test1 test1);
+
 }
