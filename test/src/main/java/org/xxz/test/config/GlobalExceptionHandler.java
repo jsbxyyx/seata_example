@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {Exception.class})
-    public ResponseEntity globalException() {
+    public ResponseEntity globalException(Exception e) {
         String xid = RootContext.getXID();
         System.out.println("xid=" + xid);
         JsonObject jsonObject = new JsonObject();
-        jsonObject.add("message", new JsonPrimitive("出错了, xid=" + xid));
+        jsonObject.add("code", new JsonPrimitive(500));
+        jsonObject.add("message", new JsonPrimitive(e.getMessage() + ", 出错了, xid=" + xid));
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonObject.toString());
     }
 

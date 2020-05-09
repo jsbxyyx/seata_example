@@ -302,4 +302,12 @@ public class MysqlService {
         mapper.testLastInsertId(test1);
         System.out.println(test1);
     }
+
+    @GlobalTransactional
+    public void test16(int n) {
+        String sql = "update test1 set id = id, name = ? where id = ?";
+        jdbcTemplate.update(sql, new Object[]{"xx", 1});
+
+        commonService.error();
+    }
 }
