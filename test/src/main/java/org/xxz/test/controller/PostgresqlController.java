@@ -16,52 +16,10 @@ public class PostgresqlController {
     @Autowired
     PostgresqlService service;
 
-    @RequestMapping("/test1")
-    public String test1() throws Exception {
-        service.test1();
-        return "success";
-    }
-
-    @RequestMapping("/test2")
-    public String test2(@RequestParam(required = false, defaultValue = "false") boolean r) throws Exception {
-        service.test2(r);
-        return "success";
-    }
-
-    @RequestMapping("/test3")
-    public String test3() throws Exception {
-        service.test3();
-        return "success";
-    }
-
-
-    @RequestMapping("/test4")
-    public String test4(@RequestParam(required = false, defaultValue = "1") int n) throws Exception {
-        service.test4(n);
-        return "success";
-    }
-
-    @RequestMapping("/test5")
-    public String test5(@RequestParam(required = false, defaultValue = "1") int n) throws Exception {
-        service.test5(n);
-        return "success";
-    }
-
-    @RequestMapping("/test6")
-    public String test6(@RequestParam(required = false, defaultValue = "1") int n) {
-        service.test6(n);
-        return "success";
-    }
-
-    @RequestMapping("/test7")
-    public String test7(@RequestParam(required = false, defaultValue = "1") int n) {
-        service.test7(n);
-        return "success";
-    }
-
-    @RequestMapping("/test8")
-    public String test8(@RequestParam(required = false, defaultValue = "1") int n) {
-        service.test8(n);
+    @RequestMapping("/test")
+    public String test(@RequestParam(value = "n", required = false, defaultValue = "1") int n,
+                       @RequestParam(value = "c", required = false, defaultValue = "1") int c) throws Exception {
+        service.getClass().getDeclaredMethod("test" + c, new Class[]{int.class}).invoke(service, new Object[]{n});
         return "success";
     }
 

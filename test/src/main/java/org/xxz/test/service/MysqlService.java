@@ -57,13 +57,13 @@ public class MysqlService {
 
     @GlobalTransactional
     @Transactional(rollbackFor = Exception.class)
-    public void test1() {
+    public void test1(int n) {
         jdbcTemplate.update("insert into test values(?, ?, ?)", new Object[]{null, "xx", "xx2"});
         restTemplate.getForObject("http://127.0.0.1:8004/mysql/test1", String.class);
     }
 
     @GlobalTransactional
-    public void test2() {
+    public void test2(int n) {
         String sid = UUID.randomUUID().toString();
         jdbcTemplate.update("insert into test_escape(`sid`,`param`,`createTime`) values (?, ?, ?)",
                 new Object[]{sid, "a", new Date()});
@@ -71,24 +71,24 @@ public class MysqlService {
 
     @GlobalTransactional
     @Transactional(rollbackFor = Exception.class)
-    public void test3() {
+    public void test3(int n) {
         jdbcTemplate.update("insert into test values(null, ?, ?)", new Object[]{"11", "111"});
         throw new RuntimeException("rollback");
     }
 
     @GlobalTransactional
-    public void test4() {
+    public void test4(int n) {
         String sid = UUID.randomUUID().toString();
         jdbcTemplate.update("insert into test_escape(sid,param,createTime) values (?, ?, ?)",
                 new Object[]{sid, "a", new Date()});
     }
 
     @GlobalTransactional
-    public void test5(int c) {
+    public void test5(int n) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = null;
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        switch (c) {
+        switch (n) {
             case 1:
                 sql = "insert into test3 (id, name) values (null, :name)";
                 sqlParameterSource.addValue("name", "xx");
@@ -116,11 +116,11 @@ public class MysqlService {
     }
 
     @GlobalTransactional
-    public void test6(Integer c) {
+    public void test6(int n) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = null;
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        switch (c) {
+        switch (n) {
             case 1:
                 sql = "insert into `test_low` values (1, :name)";
                 sqlParameterSource.addValue("name", "xx");
@@ -149,25 +149,25 @@ public class MysqlService {
     }
 
     @GlobalTransactional
-    public void test7() {
+    public void test7(int n) {
         String sql = "insert into test.`test1`(id, name) values(?, ?)";
         jdbcTemplate.update(sql, new Object[]{null, "xx"});
     }
 
     @GlobalTransactional
-    public void test8() {
+    public void test8(int n) {
         String sql = "insert into test_uuid(id, name) values(uuid(), 'xx')";
         jdbcTemplate.update(sql);
     }
 
     @GlobalTransactional
-    public void test9() {
+    public void test9(int n) {
         String sql = "insert into test_uuid(id, name) values(uuid(), 'xx')";
         jdbcTemplate.update(sql);
     }
 
     @GlobalTransactional
-    public void test10() {
+    public void test10(int n) {
         String sql = "insert into test1(id) values(?)";
         jdbcTemplate.update(sql, new Object[]{null});
     }
@@ -309,5 +309,15 @@ public class MysqlService {
         jdbcTemplate.update(sql, new Object[]{"xx", 1});
 
         commonService.error();
+    }
+
+    @GlobalTransactional
+    public void test17(int n) {
+        if (n <= 1) {
+            return ;
+        }
+        String sql = "insert into test1(id) values(?)";
+        jdbcTemplate.update(sql, new Object[]{null});
+        restTemplate.getForObject("http://127.0.0.1:8003/mysql/test?n=" + (--n) + "&c=17", String.class);
     }
 }
