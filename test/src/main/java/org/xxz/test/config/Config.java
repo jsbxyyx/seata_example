@@ -51,8 +51,8 @@ public class Config implements ApplicationContextAware {
         return new JdbcTemplate(dataSourceProxy);
     }
 
-    @Bean("mysqljdbcTemplateo")
-    public JdbcTemplate mysqljdbcTemplateo(@Autowired @Qualifier("mysqlds") DataSource dataSource) {
+    @Bean("mysqljdbcTemplateorigin")
+    public JdbcTemplate mysqljdbcTemplateorigin(@Autowired @Qualifier("mysqlds") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 
@@ -80,8 +80,8 @@ public class Config implements ApplicationContextAware {
         return new JdbcTemplate(dataSourceProxy);
     }
 
-    @Bean("oraclejdbcTemplateo")
-    public JdbcTemplate oraclejdbcTemplateo(@Autowired @Qualifier("oracleds") DataSource dataSource) {
+    @Bean("oraclejdbcTemplateorigin")
+    public JdbcTemplate oraclejdbcTemplateorigin(@Autowired @Qualifier("oracleds") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 
@@ -108,8 +108,8 @@ public class Config implements ApplicationContextAware {
         return new JdbcTemplate(dataSourceProxy);
     }
 
-    @Bean("postgresqljdbcTemplateo")
-    public JdbcTemplate postgresqljdbcTemplateo(@Autowired @Qualifier("postgresqlds") DataSource dataSource) {
+    @Bean("postgresqljdbcTemplateorigin")
+    public JdbcTemplate postgresqljdbcTemplateorigin(@Autowired @Qualifier("postgresqlds") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 

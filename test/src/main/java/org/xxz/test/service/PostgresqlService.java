@@ -32,8 +32,8 @@ public class PostgresqlService {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    @Qualifier("postgresqljdbcTemplateo")
-    private JdbcTemplate jdbcTemplateo;
+    @Qualifier("postgresqljdbcTemplateorigin")
+    private JdbcTemplate jdbcTemplateorigin;
 
     @Autowired
     @Qualifier("postgresqlnamedJdbcTemplate")
@@ -210,7 +210,7 @@ public class PostgresqlService {
             }
             case 2: {
                 String sql = "select name from test1 where name like concat('%', ?)";
-                List<Map<String, Object>> maps = jdbcTemplateo.queryForList(sql, new Object[]{"xx"});
+                List<Map<String, Object>> maps = jdbcTemplateorigin.queryForList(sql, new Object[]{"xx"});
                 System.out.println(maps);
             }
             case 3: {

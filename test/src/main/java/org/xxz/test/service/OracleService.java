@@ -1,5 +1,6 @@
 package org.xxz.test.service;
 
+import io.seata.common.util.IOUtil;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -20,6 +21,8 @@ import org.xxz.test.dao.Test1;
 import org.xxz.test.dao.Test1Mapper;
 
 import javax.annotation.Resource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -41,8 +44,8 @@ public class OracleService {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    @Qualifier("oraclejdbcTemplateo")
-    private JdbcTemplate jdbcTemplateo;
+    @Qualifier("oraclejdbcTemplateorigin")
+    private JdbcTemplate jdbcTemplateorigin;
 
     @Autowired
     @Qualifier("oraclenamedJdbcTemplate")
@@ -295,6 +298,86 @@ public class OracleService {
             case 2: {
                 String sql = "delete from test1 where id = ?";
                 jdbcTemplate.update(sql, new Object[]{10003});
+            }
+        }
+    }
+
+    @GlobalTransactional
+    public void test14(int n) {
+        switch (n) {
+            case 1: {
+                List<Object[]> args = new ArrayList<>();
+                args.add(new Object[]{"xx"});
+                args.add(new Object[]{"xx1"});
+                jdbcTemplate.batchUpdate("insert into test1(id, name) values(test1_seq.nextval, ?)", args);
+                break;
+            }
+            case 2: {
+                Connection con = null;
+                PreparedStatement ps = null;
+                try {
+                    con = jdbcTemplate.getDataSource().getConnection();
+                    ps = con.prepareStatement("insert into test1(id, name) values(test1_seq.nextval, ?)");
+                    ps.setObject(1, "xx");
+                    ps.addBatch();
+                    ps.setObject(1, "xx2");
+                    ps.addBatch();
+                    ps.executeBatch();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    IOUtil.close(ps, con);
+                }
+                break;
+            }
+            case 3: {
+                Connection con = null;
+                PreparedStatement ps = null;
+                try {
+                    con = jdbcTemplate.getDataSource().getConnection();
+                    ps = con.prepareStatement("insert into test1(id, name) values(?, ?)");
+                    ps.setObject(1, 1);
+                    ps.setObject(2, "xx");
+                    ps.addBatch();
+                    ps.setObject(1, 2);
+                    ps.setObject(2, "xx2");
+                    ps.addBatch();
+                    ps.executeBatch();
+//                    int i = 1 / 0;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    IOUtil.close(ps, con);
+                }
+                break;
+            }
+            case 4: {
+                Connection connection = null;
+                PreparedStatement preparedStatement = null;
+                try {
+                    connection = jdbcTemplate.getDataSource().getConnection();
+                    String sql = "insert into storage_tbl (id,commodity_code,count) values(?,?,?)";
+                    preparedStatement = connection.prepareStatement(sql);
+                    preparedStatement.setLong(1, 11);
+                    preparedStatement.setString(2, "10001");
+                    preparedStatement.setInt(3, 10);
+                    preparedStatement.addBatch();
+                    preparedStatement.setLong(1, 12);
+                    preparedStatement.setString(2, "20002");
+                    preparedStatement.setInt(3, 20);
+                    preparedStatement.addBatch();
+                    preparedStatement.setLong(1, 13);
+                    preparedStatement.setString(2, "30003");
+                    preparedStatement.setInt(3, 30);
+                    preparedStatement.addBatch();
+                    preparedStatement.executeBatch();
+//                    System.out.println(1 / 0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    IOUtil.close(preparedStatement, connection);
+                }
+                break;
             }
         }
     }

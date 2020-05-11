@@ -37,8 +37,8 @@ public class MysqlService {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    @Qualifier("mysqljdbcTemplateo")
-    private JdbcTemplate jdbcTemplateo;
+    @Qualifier("mysqljdbcTemplateorigin")
+    private JdbcTemplate jdbcTemplateorigin;
 
     @Autowired
     @Qualifier("mysqlnamedJdbcTemplate")
