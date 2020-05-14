@@ -61,14 +61,14 @@ public class OracleService {
     @Resource
     private CommonService commonService;
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     @Transactional(rollbackFor = Exception.class)
     public void test1() {
         jdbcTemplate.update("insert into test values(test_seq.nextval, ?, ?)", new Object[]{"11", "111"});
         throw new RuntimeException("rollback");
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     @Transactional(rollbackFor = Exception.class)
     public void test2() {
         Test1 param = new Test1();
@@ -79,14 +79,14 @@ public class OracleService {
         System.out.println(String.format("id=%s", param.getId()));
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test3() {
         String sid = UUID.randomUUID().toString();
         jdbcTemplate.update("insert into test_escape(\"sid\",\"param\", \"createTime\") values (?, ?, ?)",
                 new Object[]{sid, "a", new Date()});
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test4() {
 
         List<ProcessTaskConfig> task = new ArrayList<>();
@@ -133,7 +133,7 @@ public class OracleService {
 
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test5() {
         List<Object[]> args = new ArrayList<>();
         args.add(new Object[]{"xx", "yy"});
@@ -141,7 +141,7 @@ public class OracleService {
         jdbcTemplate.batchUpdate("insert into TEST (ID, name, name2) values (TEST_SEQ.nextval, ?, ?)", args);
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test6() {
         List<Object[]> args = new ArrayList<>();
         args.add(new Object[]{"xx", "yy"});
@@ -149,19 +149,19 @@ public class OracleService {
         jdbcTemplate.batchUpdate("insert into TEST (name, name2) values (?, ?)", args);
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test7() {
         jdbcTemplate.update("insert into TEST (name, name2) values ('xx', 'xx2')");
     }
 
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test8() {
         jdbcTemplate.update("insert into TEST (id, name, name2) values (null, 'xx', 'xx2')");
     }
 
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test9() {
         String id = UUID.randomUUID().toString();
 //        KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -179,7 +179,7 @@ public class OracleService {
         System.out.println();
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test10(int c) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = null;
@@ -211,7 +211,7 @@ public class OracleService {
         }
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test11(Integer cs) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = null;
@@ -248,7 +248,7 @@ public class OracleService {
      * test pkvalues support.
      * @param n
      */
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test12(int n) {
         // select SEQUENCE_OWNER, SEQUENCE_NAME from dba_sequences where sequence_owner = '用户名';
         // sequence_owner必须为大写，不管你的用户名是否大写。只有大写才能识别。
@@ -288,7 +288,7 @@ public class OracleService {
         }
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test13(int n) {
         switch (n) {
             case 1: {
@@ -302,7 +302,7 @@ public class OracleService {
         }
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test14(int n) {
         switch (n) {
             case 1: {

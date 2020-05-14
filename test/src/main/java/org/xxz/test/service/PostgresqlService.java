@@ -49,13 +49,13 @@ public class PostgresqlService {
     @Resource
     private CommonService commonService;
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test1() {
         String sql = "insert into test_uuid values(?, ?)";
         jdbcTemplate.update(sql, UUID.randomUUID().toString(), "xx");
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test2(boolean r) {
         String sql = "insert into \"TEST\" values(?, ?)";
         jdbcTemplate.update(sql, UUID.randomUUID().toString(), "xx");
@@ -65,13 +65,13 @@ public class PostgresqlService {
         }
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test3() {
         String sql = "insert into test(id, name) values(nextval('test_seq'), ?)";
         jdbcTemplate.update(sql, "xxx");
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test4(int n) {
         switch (n) {
             case 1: {
@@ -88,7 +88,7 @@ public class PostgresqlService {
 
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test5(int n) {
         switch (n) {
             case 1: {
@@ -187,7 +187,7 @@ public class PostgresqlService {
         }
     }
 
-    @GlobalTransactional()
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test7(int n) {
         switch (n) {
             case 1: {

@@ -55,35 +55,35 @@ public class MysqlService {
     @Resource
     private CommonService commonService;
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     @Transactional(rollbackFor = Exception.class)
     public void test1(int n) {
         jdbcTemplate.update("insert into test values(?, ?, ?)", new Object[]{null, "xx", "xx2"});
         restTemplate.getForObject("http://127.0.0.1:8004/mysql/test1", String.class);
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test2(int n) {
         String sid = UUID.randomUUID().toString();
         jdbcTemplate.update("insert into test_escape(`sid`,`param`,`createTime`) values (?, ?, ?)",
                 new Object[]{sid, "a", new Date()});
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     @Transactional(rollbackFor = Exception.class)
     public void test3(int n) {
         jdbcTemplate.update("insert into test values(null, ?, ?)", new Object[]{"11", "111"});
         throw new RuntimeException("rollback");
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test4(int n) {
         String sid = UUID.randomUUID().toString();
         jdbcTemplate.update("insert into test_escape(sid,param,createTime) values (?, ?, ?)",
                 new Object[]{sid, "a", new Date()});
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test5(int n) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = null;
@@ -115,7 +115,7 @@ public class MysqlService {
         }
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test6(int n) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = null;
@@ -148,25 +148,25 @@ public class MysqlService {
         Assert.isTrue(keyList.size() > 0, "");
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test7(int n) {
         String sql = "insert into test.`test1`(id, name) values(?, ?)";
         jdbcTemplate.update(sql, new Object[]{null, "xx"});
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test8(int n) {
         String sql = "insert into test_uuid(id, name) values(uuid(), 'xx')";
         jdbcTemplate.update(sql);
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test9(int n) {
         String sql = "insert into test_uuid(id, name) values(uuid(), 'xx')";
         jdbcTemplate.update(sql);
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test10(int n) {
         String sql = "insert into test1(id) values(?)";
         jdbcTemplate.update(sql, new Object[]{null});
@@ -176,7 +176,7 @@ public class MysqlService {
      * multi sql
      * @param n
      */
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test11(int n) {
         switch (n) {
             case 1:
@@ -212,7 +212,7 @@ public class MysqlService {
     /**
      * test pkvalues support.
      */
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test12(int n) throws Exception {
         jdbcTemplate.update("delete from test1");
         switch (n) {
@@ -250,7 +250,7 @@ public class MysqlService {
         }
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test13(int n) {
         switch (n) {
             case 1: {
@@ -264,7 +264,7 @@ public class MysqlService {
         }
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test14(int n) {
         switch (n) {
             case 1: {
@@ -294,7 +294,7 @@ public class MysqlService {
         }
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test15(int n) {
         Test1Mapper mapper = sqlSessionFactory.openSession().getMapper(Test1Mapper.class);
         Test1 test1 = new Test1();
@@ -303,15 +303,17 @@ public class MysqlService {
         System.out.println(test1);
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test16(int n) {
         String sql = "update test1 set id = id, name = ? where id = ?";
         jdbcTemplate.update(sql, new Object[]{"xx", 1});
 
         commonService.error();
+
+        System.out.println(1 / 0);
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test17(int n) {
         if (n <= 1) {
             return ;

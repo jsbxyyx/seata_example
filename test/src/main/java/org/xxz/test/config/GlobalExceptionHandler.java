@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
         JsonObject jsonObject = new JsonObject();
         jsonObject.add("code", new JsonPrimitive(500));
         jsonObject.add("message", new JsonPrimitive(e.getMessage() + ", 出错了, xid=" + xid));
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonObject.toString());
+        return ResponseEntity.status(HttpStatus.OK).body(jsonObject.toString());
     }
 
 }

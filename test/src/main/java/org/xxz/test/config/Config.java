@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.web.client.RestTemplate;
 
 import javax.sql.DataSource;
@@ -62,10 +63,15 @@ public class Config implements ApplicationContextAware {
         return new NamedParameterJdbcTemplate(jdbcTemplate);
     }
 
+    @Primary
+    @Bean("mysqlTM")
+    public DataSourceTransactionManager mysqlDataSourceTransactionManager(@Autowired @Qualifier("mysqldsp") DataSourceProxy dataSourceProxy) {
+        return new DataSourceTransactionManager(dataSourceProxy);
+    }
+
     @Bean("oracleds")
     public DruidDataSource oracleds() {
         DruidDataSource druidDataSource = new DruidDataSource();
-        Environment env = ac.getEnvironment();
         setDruidDataSourceProperties(druidDataSource, "oracle");
         return druidDataSource;
     }
@@ -90,10 +96,14 @@ public class Config implements ApplicationContextAware {
         return new NamedParameterJdbcTemplate(jdbcTemplate);
     }
 
+    @Bean("oracleTM")
+    public DataSourceTransactionManager oracleDataSourceTransactionManager(@Autowired @Qualifier("oracledsp") DataSourceProxy dataSourceProxy) {
+        return new DataSourceTransactionManager(dataSourceProxy);
+    }
+
     @Bean("postgresqlds")
     public DruidDataSource postgresqlds() {
         DruidDataSource druidDataSource = new DruidDataSource();
-        Environment env = ac.getEnvironment();
         setDruidDataSourceProperties(druidDataSource, "postgresql");
         return druidDataSource;
     }
@@ -116,6 +126,43 @@ public class Config implements ApplicationContextAware {
     @Bean("postgresqlnamedJdbcTemplate")
     public NamedParameterJdbcTemplate postgresqlnamedJdbcTemplate(@Autowired @Qualifier("postgresqljdbcTemplate") JdbcTemplate jdbcTemplate) {
         return new NamedParameterJdbcTemplate(jdbcTemplate);
+    }
+
+    @Bean("postgresqlTM")
+    public DataSourceTransactionManager postgresqlDataSourceTransactionManager(@Autowired @Qualifier("postgresqldsp") DataSourceProxy dataSourceProxy) {
+        return new DataSourceTransactionManager(dataSourceProxy);
+    }
+
+    @Bean("mysql8ds")
+    public DruidDataSource mysql8ds() {
+        DruidDataSource druidDataSource = new DruidDataSource();
+        setDruidDataSourceProperties(druidDataSource, "mysql8");
+        return druidDataSource;
+    }
+
+    @Bean("mysql8dsp")
+    public DataSourceProxy mysql8dsp(@Autowired @Qualifier("mysql8ds") DruidDataSource druidDataSource) {
+        return new DataSourceProxy(druidDataSource);
+    }
+
+    @Bean("mysql8jdbcTemplate")
+    public JdbcTemplate mysql8jdbcTemplate(@Autowired @Qualifier("mysql8dsp") DataSourceProxy dataSourceProxy) {
+        return new JdbcTemplate(dataSourceProxy);
+    }
+
+    @Bean("mysql8jdbcTemplateorigin")
+    public JdbcTemplate mysql8jdbcTemplateorigin(@Autowired @Qualifier("mysql8ds") DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
+
+    @Bean("mysql8namedJdbcTemplate")
+    public NamedParameterJdbcTemplate mysql8namedJdbcTemplate(@Autowired @Qualifier("mysql8jdbcTemplate") JdbcTemplate jdbcTemplate) {
+        return new NamedParameterJdbcTemplate(jdbcTemplate);
+    }
+
+    @Bean("mysql8TM")
+    public DataSourceTransactionManager mysql8DataSourceTransactionManager(@Autowired @Qualifier("mysql8dsp") DataSourceProxy dataSourceProxy) {
+        return new DataSourceTransactionManager(dataSourceProxy);
     }
 
     @Override

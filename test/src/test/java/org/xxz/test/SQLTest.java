@@ -79,4 +79,33 @@ public class SQLTest {
         sqlStatements = SQLUtils.parseStatements(sql, JdbcConstants.MYSQL);
         System.out.println(sqlStatements);
     }
+
+    @Test
+    public void oracle_sysdate() {
+        String sql = "insert into test1(create_time) values(sysdate)";
+        List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, JdbcConstants.ORACLE);
+        System.out.println(sqlStatements);
+    }
+
+    @Test
+    public void postgresql_current_date() {
+        String sql = "insert into test1(created) values(current_timestamp)";
+        List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, JdbcConstants.POSTGRESQL);
+        System.out.println(sqlStatements);
+    }
+
+    @Test
+    public void placeholder() {
+        String sql = "insert into test1(created) values(?)";
+        List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, JdbcConstants.POSTGRESQL);
+        System.out.println(sqlStatements);
+
+        sqlStatements = SQLUtils.parseStatements(sql, JdbcConstants.ORACLE);
+        System.out.println(sqlStatements);
+
+        sqlStatements = SQLUtils.parseStatements(sql, JdbcConstants.MYSQL);
+        System.out.println(sqlStatements);
+
+        // SQLVariantRefExpr
+    }
 }

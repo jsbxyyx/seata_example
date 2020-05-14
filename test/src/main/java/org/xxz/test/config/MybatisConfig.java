@@ -67,6 +67,19 @@ public class MybatisConfig implements ApplicationContextAware {
         return factoryBean.getObject();
     }
 
+    @Bean("mysql8sqlSessionFactory")
+    public SqlSessionFactory mysql8sqlSessionFactory(@Autowired @Qualifier("mysql8dsp") DataSourceProxy dataSourceProxy) throws Exception {
+        // tk mybatis
+        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+        factoryBean.setConfiguration(mybatisConfig());
+
+        factoryBean.setDataSource(dataSourceProxy);
+        factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
+                .getResources("classpath*:/mapper/*.xml"));
+        factoryBean.setTransactionFactory(new SpringManagedTransactionFactory());
+        return factoryBean.getObject();
+    }
+
 //    @Bean
 //    public SqlSessionFactory sqlSessionFactory(DataSource dataSourceProxy) throws Exception {
 //        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
@@ -98,6 +111,15 @@ public class MybatisConfig implements ApplicationContextAware {
 
     @Bean("postgresqlmapperScannerConfigurer")
     public org.mybatis.spring.mapper.MapperScannerConfigurer postgresqlmapperScannerConfigurer() {
+        org.mybatis.spring.mapper.MapperScannerConfigurer conf = new org.mybatis.spring.mapper.MapperScannerConfigurer();
+        String basePackage = applicationContext.getEnvironment().getProperty("mybatis.mapper.basePackage");
+        conf.setBasePackage(basePackage);
+        conf.setSqlSessionFactoryBeanName("mysqlsqlSessionFactory");
+        return conf;
+    }
+
+    @Bean("mysql8mapperScannerConfigurer")
+    public org.mybatis.spring.mapper.MapperScannerConfigurer mysql8mapperScannerConfigurer() {
         org.mybatis.spring.mapper.MapperScannerConfigurer conf = new org.mybatis.spring.mapper.MapperScannerConfigurer();
         String basePackage = applicationContext.getEnvironment().getProperty("mybatis.mapper.basePackage");
         conf.setBasePackage(basePackage);
