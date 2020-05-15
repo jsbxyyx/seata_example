@@ -12,9 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
+import org.xxz.test.dao.TkMapper;
+import org.xxz.test.dao.TkTest;
 
 import javax.annotation.Resource;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -61,6 +65,23 @@ public class Mysql8Service {
             return ps;
         }, keyHolder);
         Assert.isTrue(keyHolder.getKeyList().size() == 2, "size != 2");
+    }
+
+
+    @GlobalTransactional
+//    @Transactional(transactionManager = "mysql8TM")
+    public void test2(int n) {
+        TkMapper mapper = sqlSessionFactory.openSession().getMapper(TkMapper.class);
+        List<TkTest> list = new ArrayList<>();
+        TkTest tkTest = null;
+        for (int i = 0; i < 10000; i++) {
+            tkTest = new TkTest();
+            tkTest.setName("xx" + i);
+            list.add(tkTest);
+        }
+        mapper.insertList(list);
+
+        commonService.error();
     }
 
 }

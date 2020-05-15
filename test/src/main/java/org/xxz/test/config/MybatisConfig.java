@@ -105,7 +105,7 @@ public class MybatisConfig implements ApplicationContextAware {
         org.mybatis.spring.mapper.MapperScannerConfigurer conf = new org.mybatis.spring.mapper.MapperScannerConfigurer();
         String basePackage = applicationContext.getEnvironment().getProperty("mybatis.mapper.basePackage");
         conf.setBasePackage(basePackage);
-        conf.setSqlSessionFactoryBeanName("mysqlsqlSessionFactory");
+        conf.setSqlSessionFactoryBeanName("oraclesqlSessionFactory");
         return conf;
     }
 
@@ -114,7 +114,7 @@ public class MybatisConfig implements ApplicationContextAware {
         org.mybatis.spring.mapper.MapperScannerConfigurer conf = new org.mybatis.spring.mapper.MapperScannerConfigurer();
         String basePackage = applicationContext.getEnvironment().getProperty("mybatis.mapper.basePackage");
         conf.setBasePackage(basePackage);
-        conf.setSqlSessionFactoryBeanName("mysqlsqlSessionFactory");
+        conf.setSqlSessionFactoryBeanName("postgresqlsqlSessionFactory");
         return conf;
     }
 
@@ -123,12 +123,14 @@ public class MybatisConfig implements ApplicationContextAware {
         org.mybatis.spring.mapper.MapperScannerConfigurer conf = new org.mybatis.spring.mapper.MapperScannerConfigurer();
         String basePackage = applicationContext.getEnvironment().getProperty("mybatis.mapper.basePackage");
         conf.setBasePackage(basePackage);
-        conf.setSqlSessionFactoryBeanName("mysqlsqlSessionFactory");
+        conf.setSqlSessionFactoryBeanName("mysql8sqlSessionFactory");
         return conf;
     }
 
     private tk.mybatis.mapper.session.Configuration mybatisConfig() {
         tk.mybatis.mapper.session.Configuration configuration = new tk.mybatis.mapper.session.Configuration();
+        String basePackage = applicationContext.getEnvironment().getProperty("mybatis.mapper.basePackage");
+        configuration.addMappers(basePackage);
         Properties properties = new Properties();
         properties.setProperty("notEmpty", "true");
         configuration.setMapperProperties(properties);
