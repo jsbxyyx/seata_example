@@ -49,7 +49,7 @@ public class Mysql8Service {
     private CommonService commonService;
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(transactionManager = "mysql8TM", rollbackFor = Exception.class)
     public void test1(int n) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = "insert into test1(id, name) values(null, ?), (null, ?)";

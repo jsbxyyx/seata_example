@@ -177,4 +177,10 @@ public class Config implements ApplicationContextAware {
         druidDataSource.setPassword(env.getProperty("spring.datasource." + ds + ".password"));
         druidDataSource.setDriverClassName(env.getProperty("spring.datasource." + ds + ".driver-class-name"));
     }
+
+    // only 1.0.0
+//    @Bean
+//    public GlobalTransactionScanner globalTransactionScanner() {
+//        return new GlobalTransactionScanner("my_test_tx_group");
+//    }
 }
