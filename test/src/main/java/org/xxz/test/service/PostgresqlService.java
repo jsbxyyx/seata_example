@@ -5,6 +5,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -13,7 +14,9 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import java.sql.Array;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -219,5 +222,20 @@ public class PostgresqlService {
                 System.out.println(maps);
             }
         }
+    }
+
+    @GlobalTransactional(timeoutMills = 5 * 60000)
+    public void test9(int n) {
+        // test array
+        final int i = r.nextInt(10);
+        jdbcTemplate.update("update test_array set arr = ? where id = ?", new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+                Array arr = ps.getConnection().createArrayOf("integer", new Object[]{2, 2, i});
+                ps.setObject(1, arr);
+                ps.setObject(2, 1);
+            }
+        });
+        commonService.error();
     }
 }
