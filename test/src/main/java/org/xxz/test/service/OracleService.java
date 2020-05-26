@@ -381,4 +381,21 @@ public class OracleService {
             }
         }
     }
+
+    @GlobalTransactional(timeoutMills = 5 * 60000)
+    public void test15(int n) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        switch (n) {
+            case 1: {
+                String sql = "insert into test1(id, name) values(test1_seq.nextval, ?)";
+                jdbcTemplate.update(con -> {
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setObject(1, "xx");
+                    return ps;
+                }, keyHolder);
+                Assert.isTrue(keyHolder.getKeyList().size() == 1, "size != 1");
+                break;
+            }
+        }
+    }
 }
