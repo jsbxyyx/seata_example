@@ -322,4 +322,85 @@ public class MysqlService {
         jdbcTemplate.update(sql, new Object[]{null});
         restTemplate.getForObject("http://127.0.0.1:8003/mysql/test?n=" + (--n) + "&c=17", String.class);
     }
+
+    /**
+     * insert executor
+     * @param n
+     */
+    @GlobalTransactional(timeoutMills = 5 * 60000)
+    public void test18(int n) {
+        jdbcTemplate.update("truncate table test1");
+        switch (n) {
+            case 1: {
+                String sql = "insert into test1(name2, name, id) values(?, 'xx', ?)";
+                jdbcTemplate.update(sql, new Object[]{"xx2", null});
+                break;
+            }
+            case 2: {
+                String sql = "insert into test1(name2, name, id) values(?, 'xx', ?), (?, 'xx', ?)";
+                jdbcTemplate.update(sql, new Object[]{"xx2", null, "xx2", null});
+                break;
+            }
+            case 3: {
+                String sql = "insert into test1(id) values(?)";
+                jdbcTemplate.update(sql, new Object[]{null});
+                break;
+            }
+            case 4: {
+                String sql = "insert into test1(id) values(?), (?)";
+                jdbcTemplate.update(sql, new Object[]{null, null});
+                break;
+            }
+            case 5: {
+                String sql = "insert into test1(id, name) values(?, 'xx')";
+                jdbcTemplate.update(sql, new Object[]{null});
+                break;
+            }
+            case 6: {
+                String sql = "insert into test1(id, name) values(?, 'xx'), (?, 'xx')";
+                jdbcTemplate.update(sql, new Object[]{null, null});
+                break;
+            }
+            case 7: {
+                String sql = "insert into test1(name, id) values(?, ?)";
+                jdbcTemplate.update(sql, new Object[]{null, null});
+                break;
+            }
+            case 8: {
+                String sql = "insert into test1(name, id) values(?, ?), (?, ?)";
+                jdbcTemplate.update(sql, new Object[]{null, null, null, null});
+                break;
+            }
+            case 9: {
+                String sql = "insert into test1(name, id) values(?, ?), (?, ?)";
+                jdbcTemplate.update(sql, new Object[]{null, 1, null, 2});
+                break;
+            }
+            case 10: {
+                String sql = "insert into test1(id, name) values(?, ?), (?, ?)";
+                jdbcTemplate.update(sql, new Object[]{1, null, 2, null});
+                break;
+            }
+            case 11: {
+                String sql = "insert into test1(id, name) values(1, ?), (2, ?)";
+                jdbcTemplate.update(sql, new Object[]{null, null});
+                break;
+            }
+            case 12: {
+                String sql = "insert into test1(name, id) values(?, 1), (?, 2)";
+                jdbcTemplate.update(sql, new Object[]{null, null});
+                break;
+            }
+            case 13: {
+                String sql = "insert into test1 values(1, ?, 'x2'), (2, ?, 'x2')";
+                jdbcTemplate.update(sql, new Object[]{null, null});
+                break;
+            }
+            case 14: {
+                String sql = "insert into test1 values(?, 'xx', 'xx2'), (?, 'xx', 'xx2')";
+                jdbcTemplate.update(sql, new Object[]{null, null});
+                break;
+            }
+        }
+    }
 }
