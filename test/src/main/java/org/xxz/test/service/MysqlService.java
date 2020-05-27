@@ -403,4 +403,11 @@ public class MysqlService {
             }
         }
     }
+
+    @GlobalTransactional(timeoutMills = 5 * 60000)
+    public void test19(int n) {
+        String sql = "select * from test1";
+        List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
+        System.out.println(maps);
+    }
 }

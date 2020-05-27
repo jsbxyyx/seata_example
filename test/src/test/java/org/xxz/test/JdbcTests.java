@@ -5,6 +5,7 @@ import io.seata.common.util.IOUtil;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  * @author jsbxyyx
@@ -15,7 +16,31 @@ public class JdbcTests {
 
 //        mysqlTest();
 
-        postgresqlTest();
+//        postgresqlTest();
+
+        mysqlQuery();
+    }
+
+    private static void mysqlQuery() throws Exception {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://rm-2zetd9474ydd1g5955o.mysql.rds.aliyuncs.com:3306/test",
+                    "workshop", "Workshop123");
+            conn.setAutoCommit(false);
+            ps = conn.prepareStatement("select * from test1");
+            ps.execute();
+            rs = ps.getResultSet();
+            while (rs.next()) {
+                System.out.println(rs.getObject(1));
+                System.out.println(rs.getObject(2));
+                System.out.println(rs.getObject(3));
+                System.out.println("=============");
+            }
+        } finally {
+            IOUtil.close(ps, conn);
+        }
     }
 
     public static void mysqlTest() throws Exception {
