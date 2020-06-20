@@ -35,6 +35,7 @@
         <dependency>
             <groupId>io.seata</groupId>
             <artifactId>seata-all</artifactId>
+            <version>${seata.version}</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
