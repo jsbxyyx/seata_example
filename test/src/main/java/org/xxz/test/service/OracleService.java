@@ -304,6 +304,7 @@ public class OracleService {
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test14(int n) {
+        jdbcTemplate.update("delete from test1");
         switch (n) {
             case 1: {
                 List<Object[]> args = new ArrayList<>();
