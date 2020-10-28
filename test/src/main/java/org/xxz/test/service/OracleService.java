@@ -67,14 +67,14 @@ public class OracleService {
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
     @Transactional(rollbackFor = Exception.class)
-    public void test1() {
+    public void test1(int n) {
         jdbcTemplate.update("insert into test values(test_seq.nextval, ?, ?)", new Object[]{"11", "111"});
         throw new RuntimeException("rollback");
     }
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
     @Transactional(rollbackFor = Exception.class)
-    public void test2() {
+    public void test2(int n) {
         Test1 param = new Test1();
         param.setName("xx");
         param.setName2("xx2");
@@ -84,14 +84,14 @@ public class OracleService {
     }
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
-    public void test3() {
+    public void test3(int n) {
         String sid = UUID.randomUUID().toString();
         jdbcTemplate.update("insert into test_escape(\"sid\",\"param\", \"createTime\") values (?, ?, ?)",
                 new Object[]{sid, "a", new Date()});
     }
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
-    public void test4() {
+    public void test4(int n) {
 
         List<ProcessTaskConfig> task = new ArrayList<>();
         ProcessTaskConfig pro1 = new ProcessTaskConfig();
@@ -138,7 +138,7 @@ public class OracleService {
     }
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
-    public void test5() {
+    public void test5(int n) {
         List<Object[]> args = new ArrayList<>();
         args.add(new Object[]{"xx", "yy"});
         args.add(new Object[]{"xx1", "yy1"});
@@ -146,7 +146,7 @@ public class OracleService {
     }
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
-    public void test6() {
+    public void test6(int n) {
         List<Object[]> args = new ArrayList<>();
         args.add(new Object[]{"xx", "yy"});
         args.add(new Object[]{"xx1", "yy1"});
@@ -154,19 +154,19 @@ public class OracleService {
     }
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
-    public void test7() {
+    public void test7(int n) {
         jdbcTemplate.update("insert into TEST (name, name2) values ('xx', 'xx2')");
     }
 
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
-    public void test8() {
+    public void test8(int c) {
         jdbcTemplate.update("insert into TEST (id, name, name2) values (null, 'xx', 'xx2')");
     }
 
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
-    public void test9() {
+    public void test9(int c) {
         String id = UUID.randomUUID().toString();
 //        KeyHolder keyHolder = new GeneratedKeyHolder();
 //        PreparedStatementCreator preparedStatementCreator = null;
@@ -250,7 +250,7 @@ public class OracleService {
 
     /**
      * test pkvalues support.
-     * @param n
+     * @param c
      */
     @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test12(int n) {
