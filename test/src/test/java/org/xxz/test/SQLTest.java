@@ -108,4 +108,20 @@ public class SQLTest {
 
         // SQLVariantRefExpr
     }
+
+
+    @Test
+    public void testkeyword() {
+
+        String sql = "insert into \"Sel'ect\" values(?, ?)";
+        List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, JdbcConstants.POSTGRESQL);
+        System.out.println(sqlStatements);
+    }
+
+    @Test
+    public void pgtest() {
+        String table = "\"Sel\"\"ect\"";
+        table = table.replaceAll("(^\")|(\"$)", "");
+        System.out.println(table);
+    }
 }

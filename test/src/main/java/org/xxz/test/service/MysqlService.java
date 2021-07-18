@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
@@ -412,8 +413,128 @@ public class MysqlService {
         System.out.println(maps);
     }
 
-    @GlobalTransactional
+    /**
+     * 复合主键
+     * @param n
+     */
+    @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test20(int n) {
+        jdbcTemplate.update("truncate table test_multi_pk");
+        switch (n) {
+            case 1: {
+                GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+                String sql = "insert into test_multi_pk(id1, id2, name) values(?, ?, ?)";
+                jdbcTemplate.update(con -> {
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setObject(1, 1);
+                    ps.setObject(2, 1);
+                    ps.setObject(3, "xx");
+                    return ps;
+                }, keyHolder);
+                Assert.isTrue(keyHolder.getKey().intValue() == 1, "not equals");
+                break;
+            }
+            case 2: {
+                String sql = "insert into test_multi_pk(id1, id2, name) values(1, 1, 'xx')";
+                jdbcTemplate.update(sql);
+                break;
+            }
+            case 3: {
+                GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+                String sql = "insert into test_multi_pk(id1, id2, name) values(null, 1, ?)";
+                jdbcTemplate.update(con -> {
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setObject(1, "xx");
+                    return ps;
+                }, keyHolder);
+                Assert.isTrue(keyHolder.getKey().intValue() == 1, "not equals");
+                break;
+            }
+            case 4: {
+                GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+                String sql = "insert into test_multi_pk(id1, id2, name) values(?, ?, ?)";
+                jdbcTemplate.update(con -> {
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setObject(1, 1);
+                    ps.setObject(2, 1);
+                    ps.setObject(3, "xx");
+                    return ps;
+                }, keyHolder);
+                Assert.isTrue(keyHolder.getKey().intValue() == 1, "not equals");
+                commonService.error();
+                break;
+            }
+            case 5: {
+                String sql = "insert into test_multi_pk(id1, id2, name) values(1, 1, 'xx')";
+                jdbcTemplate.update(sql);
+                commonService.error();
+                break;
+            }
+            case 6: {
+                GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+                String sql = "insert into test_multi_pk(id1, id2, name) values(null, 1, ?)";
+                jdbcTemplate.update(con -> {
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setObject(1, "xx");
+                    return ps;
+                }, keyHolder);
+                Assert.isTrue(keyHolder.getKey().intValue() == 1, "not equals");
+                commonService.error();
+                break;
+            }
+            case 7: {
+                GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+                String sql = "insert into test_multi_pk(id1, id2, name) values(null, FLOOR(RAND() * 10000), ?)";
+                jdbcTemplate.update(con -> {
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setObject(1, "xx");
+                    return ps;
+                }, keyHolder);
+                Assert.isTrue(keyHolder.getKey().intValue() == 1, "not equals");
+                break;
+            }
+            case 8: {
+                GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+                String sql = "insert into test_multi_pk(id1, id2, name) values(null, 1, ?), (null, 2, ?)";
+                jdbcTemplate.update(con -> {
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setObject(1, "xx");
+                    ps.setObject(2, "xx");
+                    return ps;
+                }, keyHolder);
+                Assert.isTrue(Objects.equals(keyHolder.getKeyList().get(0).get("GENERATED_KEY").toString(), "1"), "not equals");
+                break;
+            }
+            case 9: {
+                GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+                String sql = "insert into test_multi_pk values(null, 1, ?), (null, 2, ?)";
+                jdbcTemplate.update(con -> {
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setObject(1, "xx");
+                    ps.setObject(2, "xx");
+                    return ps;
+                }, keyHolder);
+                Assert.isTrue(Objects.equals(keyHolder.getKeyList().get(0).get("GENERATED_KEY").toString(), "1"), "not equals");
+                break;
+            }
+            case 10: {
+                GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+                String sql = "insert into test_multi_pk values(null, 1, ?), (null, 2, ?)";
+                jdbcTemplate.update(con -> {
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setObject(1, "xx");
+                    ps.setObject(2, "xx");
+                    return ps;
+                }, keyHolder);
+                Assert.isTrue(Objects.equals(keyHolder.getKeyList().get(0).get("GENERATED_KEY").toString(), "1"), "not equals");
+                commonService.error();
+                break;
+            }
+        }
+    }
+
+    @GlobalTransactional
+    public void test21(int n) {
         String sql = "update `test_space` set `test space` = ? where `test space` = ?";
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -422,7 +543,7 @@ public class MysqlService {
             ps.setObject(i++, '1');
             return ps;
         });
-
         commonService.error();
     }
+
 }

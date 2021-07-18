@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -21,8 +22,11 @@ import org.xxz.test.dao.Test1;
 import org.xxz.test.dao.Test1Mapper;
 
 import javax.annotation.Resource;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -63,14 +67,14 @@ public class OracleService {
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
     @Transactional(rollbackFor = Exception.class)
-    public void test1() {
+    public void test1(int n) {
         jdbcTemplate.update("insert into test values(test_seq.nextval, ?, ?)", new Object[]{"11", "111"});
         throw new RuntimeException("rollback");
     }
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
     @Transactional(rollbackFor = Exception.class)
-    public void test2() {
+    public void test2(int n) {
         Test1 param = new Test1();
         param.setName("xx");
         param.setName2("xx2");
@@ -80,14 +84,14 @@ public class OracleService {
     }
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
-    public void test3() {
+    public void test3(int n) {
         String sid = UUID.randomUUID().toString();
         jdbcTemplate.update("insert into test_escape(\"sid\",\"param\", \"createTime\") values (?, ?, ?)",
                 new Object[]{sid, "a", new Date()});
     }
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
-    public void test4() {
+    public void test4(int n) {
 
         List<ProcessTaskConfig> task = new ArrayList<>();
         ProcessTaskConfig pro1 = new ProcessTaskConfig();
@@ -134,7 +138,7 @@ public class OracleService {
     }
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
-    public void test5() {
+    public void test5(int n) {
         List<Object[]> args = new ArrayList<>();
         args.add(new Object[]{"xx", "yy"});
         args.add(new Object[]{"xx1", "yy1"});
@@ -142,7 +146,7 @@ public class OracleService {
     }
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
-    public void test6() {
+    public void test6(int n) {
         List<Object[]> args = new ArrayList<>();
         args.add(new Object[]{"xx", "yy"});
         args.add(new Object[]{"xx1", "yy1"});
@@ -150,19 +154,19 @@ public class OracleService {
     }
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
-    public void test7() {
+    public void test7(int n) {
         jdbcTemplate.update("insert into TEST (name, name2) values ('xx', 'xx2')");
     }
 
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
-    public void test8() {
+    public void test8(int c) {
         jdbcTemplate.update("insert into TEST (id, name, name2) values (null, 'xx', 'xx2')");
     }
 
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
-    public void test9() {
+    public void test9(int c) {
         String id = UUID.randomUUID().toString();
 //        KeyHolder keyHolder = new GeneratedKeyHolder();
 //        PreparedStatementCreator preparedStatementCreator = null;
@@ -246,7 +250,7 @@ public class OracleService {
 
     /**
      * test pkvalues support.
-     * @param n
+     * @param c
      */
     @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test12(int n) {
@@ -304,6 +308,7 @@ public class OracleService {
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test14(int n) {
+        jdbcTemplate.update("delete from test1");
         switch (n) {
             case 1: {
                 List<Object[]> args = new ArrayList<>();
@@ -397,5 +402,46 @@ public class OracleService {
                 break;
             }
         }
+    }
+
+    @GlobalTransactional(timeoutMills = 5 * 60000)
+    public void test16(int n) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        switch (n) {
+            case 1: {
+                String sql = "insert into \"test_date\"(\"id\", \"gmt_date\") values(test1_seq.nextval, sysdate)";
+                jdbcTemplate.update(con -> {
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    return ps;
+                }, keyHolder);
+                Assert.isTrue(keyHolder.getKeyList().size() == 1, "size != 1");
+                commonService.error();
+                break;
+            }
+        }
+    }
+
+    /**
+     * test nclob
+     */
+    @GlobalTransactional(timeoutMills = 5 * 60000)
+    public void test17(int n) {
+        jdbcTemplate.update("insert into test_nclob (id, details) values(?, ?)", new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+//                DruidPooledConnection con1 = (DruidPooledConnection) ps.getConnection();
+//                ConnectionSpy con2 = (ConnectionSpy) con1.getConnection();
+//                Connection con = con2.getRealConnection();
+                FileReader reader = null;
+                try {
+                    reader = new FileReader("/tmp/1.log");
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                ps.setObject(1, 1);
+                ps.setClob(2, reader);
+            }
+        });
+        commonService.error();
     }
 }
