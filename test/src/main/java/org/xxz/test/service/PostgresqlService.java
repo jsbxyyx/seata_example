@@ -238,4 +238,10 @@ public class PostgresqlService {
         });
         commonService.error();
     }
+
+    @GlobalTransactional(timeoutMills = 5 * 60000)
+    public void test10(int n) {
+        jdbcTemplate.update("insert into seata.test(id) values(1)");
+        commonService.error();
+    }
 }

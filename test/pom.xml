@@ -120,6 +120,11 @@
             <artifactId>seata-spring-boot-starter</artifactId>
             <version>${seata.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.seata</groupId>
+            <artifactId>seata-spring-autoconfigure-client</artifactId>
+            <version>${seata.version}</version>
+        </dependency>
         <!-- only 1.0- -->
         <!--<dependency>-->
             <!--<groupId>io.seata</groupId>-->

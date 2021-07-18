@@ -17,6 +17,7 @@ import org.xxz.test.dao.Test1;
 import org.xxz.test.dao.Test1Mapper;
 
 import javax.annotation.Resource;
+import java.sql.PreparedStatement;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -409,5 +410,19 @@ public class MysqlService {
         String sql = "select * from test1";
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         System.out.println(maps);
+    }
+
+    @GlobalTransactional
+    public void test20(int n) {
+        String sql = "update `test_space` set `test space` = ? where `test space` = ?";
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql);
+            int i = 1;
+            ps.setObject(i++, "xx");
+            ps.setObject(i++, '1');
+            return ps;
+        });
+
+        commonService.error();
     }
 }
