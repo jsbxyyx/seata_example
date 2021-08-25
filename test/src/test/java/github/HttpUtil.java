@@ -1,23 +1,19 @@
-package org.xxz.test;
+package github;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 
-/**
- * @author jimin.jm@alibaba-inc.com
- * @date 2019/12/13
- */
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+
 public class HttpUtil {
 
     public static String sendHttpsGet(String url, Map<String, String> headers, Map<String, String> pmap) {
-        HttpClient client = new DefaultHttpClient();
+        CloseableHttpClient client = HttpClientBuilder.create().build();
         // 实例化HTTP方法
         HttpGet get = new HttpGet();
         for (String keyh : headers.keySet()) {
@@ -34,15 +30,11 @@ public class HttpUtil {
             HttpResponse response = client.execute(get);
             result = EntityUtils.toString(response.getEntity());
         } catch (Exception e) {
-            // TODO: handle exception
         }
         try {
-            result = new String(result.getBytes("ISO-8859-1"), "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            client.close();
+        } catch (IOException e) {
         }
         return result;
-
     }
 }

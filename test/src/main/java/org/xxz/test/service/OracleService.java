@@ -68,7 +68,7 @@ public class OracleService {
     @GlobalTransactional(timeoutMills = 5 * 60000)
     @Transactional(rollbackFor = Exception.class)
     public void test1(int n) {
-        jdbcTemplate.update("insert into test values(test_seq.nextval, ?, ?)", new Object[]{"11", "111"});
+        jdbcTemplate.update("insert into test values(test_seq.nextval, ?, ?)", new Object[] { "11", "111" });
         throw new RuntimeException("rollback");
     }
 
@@ -87,7 +87,7 @@ public class OracleService {
     public void test3(int n) {
         String sid = UUID.randomUUID().toString();
         jdbcTemplate.update("insert into test_escape(\"sid\",\"param\", \"createTime\") values (?, ?, ?)",
-                new Object[]{sid, "a", new Date()});
+                new Object[] { sid, "a", new Date() });
     }
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
@@ -115,7 +115,7 @@ public class OracleService {
             int size = task.size();
             String sqlStatement = "org.xxz.test.dao.ProcessTaskConfigMapper.save";
 
-            for(int i = 0; i < size; ++i) {
+            for (int i = 0; i < size; ++i) {
                 batchSqlSession.insert(sqlStatement, task.get(i));
                 if (i >= 1 && i % 2 == 0) {
                     batchSqlSession.flushStatements();
@@ -140,16 +140,16 @@ public class OracleService {
     @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test5(int n) {
         List<Object[]> args = new ArrayList<>();
-        args.add(new Object[]{"xx", "yy"});
-        args.add(new Object[]{"xx1", "yy1"});
+        args.add(new Object[] { "xx", "yy" });
+        args.add(new Object[] { "xx1", "yy1" });
         jdbcTemplate.batchUpdate("insert into TEST (ID, name, name2) values (TEST_SEQ.nextval, ?, ?)", args);
     }
 
     @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test6(int n) {
         List<Object[]> args = new ArrayList<>();
-        args.add(new Object[]{"xx", "yy"});
-        args.add(new Object[]{"xx1", "yy1"});
+        args.add(new Object[] { "xx", "yy" });
+        args.add(new Object[] { "xx1", "yy1" });
         jdbcTemplate.batchUpdate("insert into TEST (name, name2) values (?, ?)", args);
     }
 
@@ -158,28 +158,27 @@ public class OracleService {
         jdbcTemplate.update("insert into TEST (name, name2) values ('xx', 'xx2')");
     }
 
-
     @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test8(int c) {
         jdbcTemplate.update("insert into TEST (id, name, name2) values (null, 'xx', 'xx2')");
     }
 
-
     @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test9(int c) {
         String id = UUID.randomUUID().toString();
-//        KeyHolder keyHolder = new GeneratedKeyHolder();
-//        PreparedStatementCreator preparedStatementCreator = null;
-//        preparedStatementCreator = (con) -> {
-//            PreparedStatement ps = con.prepareStatement("insert into test_str(id, name) values (?, ?)");
-//            int i = 1;
-//            ps.setObject(i++, id);
-//            ps.setObject(i++, "xx");
-//            return ps;
-//        };
-//        jdbcTemplate.update(preparedStatementCreator, keyHolder);
+        // KeyHolder keyHolder = new GeneratedKeyHolder();
+        // PreparedStatementCreator preparedStatementCreator = null;
+        // preparedStatementCreator = (con) -> {
+        // PreparedStatement ps = con.prepareStatement("insert into test_str(id, name)
+        // values (?, ?)");
+        // int i = 1;
+        // ps.setObject(i++, id);
+        // ps.setObject(i++, "xx");
+        // return ps;
+        // };
+        // jdbcTemplate.update(preparedStatementCreator, keyHolder);
 
-        jdbcTemplate.update("insert into TEST_STR(id, name) values (?, ?)", new Object[]{id, "xx"});
+        jdbcTemplate.update("insert into TEST_STR(id, name) values (?, ?)", new Object[] { id, "xx" });
         System.out.println();
     }
 
@@ -202,7 +201,7 @@ public class OracleService {
                 break;
         }
 
-        namedJdbcTemplate.update(sql, sqlParameterSource, keyHolder, new String[]{"id"});
+        namedJdbcTemplate.update(sql, sqlParameterSource, keyHolder, new String[] { "id" });
         List<Map<String, Object>> keyList = keyHolder.getKeyList();
         Assert.isTrue(keyList.size() > 0, "");
         for (Map<String, Object> key : keyList) {
@@ -242,35 +241,37 @@ public class OracleService {
                 break;
         }
 
-        namedJdbcTemplate.update(sql, sqlParameterSource, keyHolder, new String[]{"id"});
+        namedJdbcTemplate.update(sql, sqlParameterSource, keyHolder, new String[] { "id" });
         List<Map<String, Object>> keyList = keyHolder.getKeyList();
         System.out.printf("keyList=[%s]\n", keyList);
-//        Assert.isTrue(keyList.size() > 0, "");
+        // Assert.isTrue(keyList.size() > 0, "");
     }
 
     /**
      * test pkvalues support.
+     * 
      * @param c
      */
     @GlobalTransactional(timeoutMills = 5 * 60000)
     public void test12(int n) {
-        // select SEQUENCE_OWNER, SEQUENCE_NAME from dba_sequences where sequence_owner = '用户名';
+        // select SEQUENCE_OWNER, SEQUENCE_NAME from dba_sequences where sequence_owner
+        // = '用户名';
         // sequence_owner必须为大写，不管你的用户名是否大写。只有大写才能识别。
         jdbcTemplate.update("delete from test1");
         switch (n) {
             case 1: {
                 String sql = "insert into test1(id, name) values(test1_seq.nextval, ?)";
-                jdbcTemplate.update(sql, new Object[]{"xx"});
+                jdbcTemplate.update(sql, new Object[] { "xx" });
                 break;
             }
             case 2: {
                 String sql = "insert into test1(id, name) values(10000, ?)";
-                jdbcTemplate.update(sql, new Object[]{"xx"});
+                jdbcTemplate.update(sql, new Object[] { "xx" });
                 break;
             }
             case 3: {
                 String sql = "insert into test1(id, name) values(floor(dbms_random.value(900,1000)), ?)";
-                jdbcTemplate.update(sql, new Object[]{"xx"});
+                jdbcTemplate.update(sql, new Object[] { "xx" });
                 break;
             }
             case 4: {
@@ -297,11 +298,11 @@ public class OracleService {
         switch (n) {
             case 1: {
                 String sql = "delete from test1 t1 where t1.id = ?";
-                jdbcTemplate.update(sql, new Object[]{10002});
+                jdbcTemplate.update(sql, new Object[] { 10002 });
             }
             case 2: {
                 String sql = "delete from test1 where id = ?";
-                jdbcTemplate.update(sql, new Object[]{10003});
+                jdbcTemplate.update(sql, new Object[] { 10003 });
             }
         }
     }
@@ -312,8 +313,8 @@ public class OracleService {
         switch (n) {
             case 1: {
                 List<Object[]> args = new ArrayList<>();
-                args.add(new Object[]{"xx"});
-                args.add(new Object[]{"xx1"});
+                args.add(new Object[] { "xx" });
+                args.add(new Object[] { "xx1" });
                 jdbcTemplate.batchUpdate("insert into test1(id, name) values(test1_seq.nextval, ?)", args);
                 break;
             }
@@ -348,7 +349,7 @@ public class OracleService {
                     ps.setObject(2, "xx2");
                     ps.addBatch();
                     ps.executeBatch();
-//                    int i = 1 / 0;
+                    // int i = 1 / 0;
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -376,7 +377,7 @@ public class OracleService {
                     preparedStatement.setInt(3, 30);
                     preparedStatement.addBatch();
                     preparedStatement.executeBatch();
-//                    System.out.println(1 / 0);
+                    // System.out.println(1 / 0);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -429,9 +430,9 @@ public class OracleService {
         jdbcTemplate.update("insert into test_nclob (id, details) values(?, ?)", new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
-//                DruidPooledConnection con1 = (DruidPooledConnection) ps.getConnection();
-//                ConnectionSpy con2 = (ConnectionSpy) con1.getConnection();
-//                Connection con = con2.getRealConnection();
+                // DruidPooledConnection con1 = (DruidPooledConnection) ps.getConnection();
+                // ConnectionSpy con2 = (ConnectionSpy) con1.getConnection();
+                // Connection con = con2.getRealConnection();
                 FileReader reader = null;
                 try {
                     reader = new FileReader("/tmp/1.log");
@@ -443,5 +444,18 @@ public class OracleService {
             }
         });
         commonService.error();
+    }
+
+    /**
+     * test varchar 2000
+     * 
+     * @param n
+     */
+    @GlobalTransactional(timeoutMills = 5 * 60000)
+    public void test18(int n) {
+        StringBuilder a = new StringBuilder();
+        a.append("YM4BWY5IKL-eyJsaWNDIyLTA4LTEwIiwiZXh0ZW5kZWQiOmZhbHNlfSx7ImNvZGUiOiJETSIsInBhaWRVcFRvIjoiMjAyMi0wOC0xMCIsImV4dGVuZGVkIjpmYWxzZX0seyJjb2RlIjoiUlNGIiwicGFpZFVwVG8iOiIyMDIyLTA4LTEwIiwiZXh0ZW5kZWQiOnRydWV9LHsiY29kZSI6IlBDIiwicGFpZFVwVG8iOiIyMDIyLTA4LTEwIiwiZXh0ZW5kZWQiOmZhbHNlfSx7ImNvZGUiOiJSQyIsInBhaWRVcFRvIjoiMjAyMi0wOC0xMCIsImV4dGVuZGVkIjpmYWxzZX0seyJjb2RlIjoiQ0wiLCJwYWlkVXBUbyI6IjIwMjItMDgtMTAiLCJleHRlbmRlZCI6ZmFsc2V9LHsiY29kZSI6IldTIiwicGFpZFVwVG8iOiIyMDIyLTA4LTEwIiwiZXh0ZW5kZWQiOmZhbHNlfSx7ImNvZGUiOiJSRCIsInBhaWRVcFRvIjoiMjAyMi0wOC0xMCIsImV4dGVuZGVkIjpmYWxzZX0seyJjb2RlIjoiUlMwIiwicGFpZFVwVG8iOiIyMDIyLTA4LTEwIiwiZXh0ZW5kZWQiOmZhbHNlfSx7ImNvZGUiOiJSTSIsInBhaWRVcFRvIjoiMjAyMi0wOC0xMCIsImV4dGVuZGVkIjpmYWxzZX0seyJjb2RlIjoiQUMiLCJwYWlkVXBUbyI6IjIwMjItMDgtMTAiLCJleHRlbmRlZCI6ZmFsc2V9LHsiY29kZSI6IlJTViIsInBhaWRVcFRvIjoiMjAyMi0wOC0xMCIsImV4dGVuZGVkIjp0cnVlfSx7ImNvZGUiOiJEQyIsInBhaWRVcFRvIjoiMjAyMi0wOC0xMCIsImV4dGVuZGVkIjpmYWxzZX0seyJjb2RlIjoiUlNVIiwicGFpZFVwVG8iOiIyMDIyLTA4LTEwIiwiZXh0ZW5kZWQiOmZhbHNlfSx7ImNvZGUiOiJEUCIsInBhaWRVcFRvIjoiMjAyMi0wOC0xMCIsImV4dGVuZGVkIjp0cnVlfSx7ImNvZGUiOiJQREIiLCJwYWlkVXBUbyI6IjIwMjItMDgtMTAiLCJleHRlbmRlZCI6dHJ1ZX0seyJjb2RlIjoiUFdTIiwicGFpZFVwVG8iOiIyMDIyLTA4LTEwIiwiZXh0ZW5kZWQiOnRydWV9LHsiY29kZSI6IlBTSSIsInBhaWRVcFRvIjoiMjAyMi0wOC0xMCIsImV4dGVuZGVkIjp0cnVlfSx7ImNvZGUiOiJQQ1dNUCIsInBhaWRVcFRvIjoiMjAyMi0wOC0xMCIsImV4dGVuZGVkIjp0cnVlfSx7ImNvZGUiOiJQUFMiLCJwYWlkVXBUbyI6IjIwMjItMDgtMTAiLCJleHRlbmRlZCI6dHJ1ZX0seyJjb2RlIjoiUEdPIiwicGFpZFVwVG8iOiIyMDIyLTA4LTEwIiwiZXh0ZW5kZWQiOnRydWV9LHsiY29kZSI6IlBQQyIsInBhaWRVcFRvIjoiMjAyMi0wOC0xMCIsImV4dGVuZGVkIjp0cnVlfSx7ImNvZGUiOiJQUkIiLCJwYWlkVXBUbyI6IjIwMjItMDgtMTAiLCJleHRlbmRlZCI6dHJ1ZX0seyJjb2RlIjoiUFNXIiwicGFpZFVwVG8iOiIyMDIyLTA4LTEwIiwiZXh0ZW5kZWQiOnRydWV9LHsiY29kZSI6IlJTIiwicGFpZFVwVG8iOiIyMDIyLTA4LTEwIiwiZXh0ZW5kZWQiOnRydWV9XSwibWV0YWRhdGEiOiIwMTIwMjEwODExRVBKQTAwMDAwOSIsImhhc2giOiIyNTcwNTI2NS8wOjQ4MzAwMjEzOCIsImdyYWNlUGVyaW9kRGF5cyI6MCwiYXV0b1Byb2xvbmdhdGVkIjpmYWxzZSwiaXNBdXRvUHJvbG9uZ2F0ZWQiOmZhbHNlfQ==-cj2bMGKFLLyaQnq9kulRVEyeCs2K1NO1KLMPbnm48ZNmcIr9KjsMu/TcZdf/s217Jy1+aRf3twtURbOSNf4Y4rEUr7y6sckafzwT+oRf023rc2/obObpEP+GoE8NjskcKtV2UYWCTwcCJ4sLtdImiWyOB8rJV2aW16iu++5OJ2G7Z4y0YJ5+DNdKQyPsiO+5+uzqYmJUP8CiN9tebe7MUbZ3Va/S2xiRZwMHDWRqkxbM54E01Ma4jTEfHYxy2wIH7R4gcZYZO9fX7b5n3nPLK0Vhq6vWMl2me2Waqlkb2vC1z7WNU/By6wns5MoZoxX80FTOhn8n7Vq/YJxko0XZSA==-MIIETDCCAjSgAwIBAgIBDTANBgkqhkiG9w0BAQsFADAYMRYwFAYDVQQDDA1KZXRQcm9maWxlIENBMB4XDTIwMTAxOTA5MDU1M1oXDTIyMTAyMTA5MDU1M1owHzEdMBsGA1UEAwwUcHJvZDJ5LWZyb20tMjAyMDEwMTkwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDCP4uk4SlVdA5nuA3DQC+NsEnZS9npFnO0zrmMWcz1++q2UWJNuGTh0rwi+3fUJIArfvVh7gNtIp93rxjtrQAuf4/Fa6sySp4c32MeFACfC0q+oUoWebhOIaYTYUxm4LAZ355vzt8YeDPmvWKxA81udqEk4gU9NNAOz1Um5/8LyR8SGsSc4EDBRSjcMWMwMkYSauGqGcEUK8WhfplsyF61lKSOFA6VmfUmeDK15rUWWLbOMKgn2cxFA98A+s74T9Oo96CU7rp/umDXvhnyhAXSukw/qCGOVhwKR8B6aeDtoBWQgjnvMtPgOUPRTPkPGbwPwwDkvAHYiuKJ7Bd2wH7rAgMBAAGjgZkwgZYwCQYDVR0TBAIwADAdBgNVHQ4EFgQUJNoRIpb1hUHAk0foMSNM9MCEAv8wSAYDVR0jBEEwP4AUo562SGdCEjZBvW3gubSgUouX8bOhHKQaMBgxFjAUBgNVBAMMDUpldFByb2ZpbGUgQ0GCCQDSbLGDsoN54TATBgNVHSUEDDAKBggrBgEFBQcDATALBgNVHQ8EBAMCBaAwDQYJKoZIhvcNAQELBQADggIBAB2J1ysRudbkqmkUFK8xqhiZaYPd30TlmCmSAaGJ0eBpvkVeqA2jGYhAQRqFiAlFC63JKvWvRZO1iRuWCEfUMkdqQ9VQPXziE/BlsOIgrL6RlJfuFcEZ8TK3syIfIGQZNCxYhLLUuet2HE6LJYPQ5c0jH4kDooRpcVZ4rBxNwddpctUO2te9UU5/FjhioZQsPvd92qOTsV+8Cyl2fvNhNKD1Uu9ff5AkVIQn4JU23ozdB/R5oUlebwaTE6WZNBs+TA/qPj+5/wi9NH71WRB0hqUoLI2AKKyiPw++FtN4Su1vsdDlrAzDj9ILjpjJKA1ImuVcG329/WTYIKysZ1CWK3zATg9BeCUPAV1pQy8ToXOq+RSYen6winZ2OO93eyHv2Iw5kbn1dqfBw1BuTE29V2FJKicJSu8iEOpfoafwJISXmz1wnnWL3V/0NxTulfWsXugOoLfv0ZIBP1xH9kmf22jjQ2JiHhQZP7ZDsreRrOeIQ/c4yR8IQvMLfC0WKQqrHu5ZzXTH4NO3CwGWSlTY74kE91zXB5mwWAx1jig+UXYc2w4RkVhy0//lOmVya/PEepuuTTI4+UJwC7qbVlh5zfhj8oTNUXgN0AOc+Q0/WFPl1aw5VV/VrO8FCoB15lFVlpKaQ1Yh+DVU8ke+rt9Th0BCHXe0uZOEmH0nOnH/0onD");
+        jdbcTemplate.update("insert into test_varchar(ID_, TEST) values(?, ?)", new Object[] { "1430362753712893954", a.toString() });
+        // commonService.error();
     }
 }
