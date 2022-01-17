@@ -249,6 +249,11 @@ public class MysqlService {
                 jdbcTemplate.update(sql);
                 break;
             }
+            case 7: {
+                String sql = "insert into test1(id, name) values(floor(now() + 1), ?)";
+                jdbcTemplate.update(sql, new Object[]{"xx"});
+                break;
+            }
         }
     }
 
