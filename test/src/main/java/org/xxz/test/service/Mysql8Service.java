@@ -1,5 +1,6 @@
 package org.xxz.test.service;
 
+import io.seata.spring.annotation.GlobalLock;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +85,22 @@ public class Mysql8Service {
         mapper.insertList(list);
 
         commonService.error();
+    }
+
+    @GlobalTransactional(timeoutMills = 5 * 60000)
+    public void test3(int n) {
+        String sql = "insert into test1(id) values(?)";
+        jdbcTemplate.update(sql, new Object[]{null});
+
+        test4(n);
+
+        commonService.error();
+    }
+
+    @GlobalLock
+    public void test4(int n) {
+        String sql = "select * from test1 where id = 9";
+        jdbcTemplate.queryForList(sql);
     }
 
 }
