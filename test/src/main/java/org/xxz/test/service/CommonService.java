@@ -3,6 +3,7 @@ package org.xxz.test.service;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -12,6 +13,7 @@ import javax.annotation.Resource;
 /**
  * @author jsbxyyx
  */
+@ConditionalOnProperty(value = "spring.datasource.mysql8.enable", havingValue = "true")
 @Service
 public class CommonService {
 
@@ -19,7 +21,7 @@ public class CommonService {
     private RestTemplate restTemplate;
 
     @Autowired
-    @Qualifier("mysqljdbcTemplate")
+    @Qualifier("mysql8jdbcTemplate")
     private JdbcTemplate jdbcTemplate;
 
     public void error() {

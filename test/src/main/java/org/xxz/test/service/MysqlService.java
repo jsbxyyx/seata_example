@@ -4,6 +4,7 @@ import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -29,6 +30,7 @@ import java.util.UUID;
 /**
  * @author tt
  */
+@ConditionalOnProperty(value = "spring.datasource.mysql.enable", havingValue = "true")
 @Service
 public class MysqlService {
 
