@@ -94,7 +94,7 @@ public class Mysql8Service {
 
         test4(n);
 
-        commonService.error();
+        commonService.ok();
     }
 
     @GlobalLock

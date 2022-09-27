@@ -28,7 +28,7 @@ public class CommonService {
         restTemplate.getForObject("http://127.0.0.1:8003/common/error?error=0", String.class);
     }
 
-    public void noerror() {
+    public void ok() {
         restTemplate.getForObject("http://127.0.0.1:8003/common/error?error=1", String.class);
     }
 
