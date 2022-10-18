@@ -103,4 +103,16 @@ public class Mysql8Service {
         jdbcTemplate.queryForList(sql);
     }
 
+    @GlobalTransactional(timeoutMills = 5 * 60000)
+    public void test5(int n) {
+//        String sql = "update test1, test2" +
+//                " set test1.name = '1', test2.name2 = '2xxxxx'" +
+//                " where test2.name = '2xx'";
+
+        String sql = "update test1, (select 1 as id) t set test1.name = '1' where test1.id = t.id";
+        jdbcTemplate.update(sql);
+
+        commonService.error();
+    }
+
 }

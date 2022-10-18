@@ -1,6 +1,5 @@
 package org.xxz.test.config;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -12,8 +11,6 @@ import org.springframework.web.client.RestTemplate;
  */
 @Configuration
 public class Config {
-
-    private ApplicationContext ac;
 
     @Bean
     public RestTemplate restTemplate() {
