@@ -18,6 +18,10 @@ import org.xxz.test.dao.TkMapper;
 import org.xxz.test.dao.TkTest;
 
 import javax.annotation.Resource;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
@@ -113,6 +117,45 @@ public class Mysql8Service {
         jdbcTemplate.update(sql);
 
         commonService.error();
+    }
+
+    @GlobalTransactional(timeoutMills = 5 * 60000)
+    @Transactional(rollbackFor = Exception.class)
+    public void test6(int n) {
+        // 40MB
+        byte[] bytes;
+        try {
+            bytes = Files.readAllBytes(new File(System.getProperty("user.dir") + "/test/tmp.txt").toPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        final byte[] bs = bytes;
+        boolean insert = (n == 0);
+        if (insert) {
+            jdbcTemplate.update("truncate test");
+            String sql = "insert into test(id, name, file) values(?,?,?)";
+            jdbcTemplate.update(con -> {
+                System.out.println(con.getClass().getName());
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setObject(1, 1);
+                ps.setObject(2, "name");
+                ps.setObject(3, new ByteArrayInputStream(bs));
+                return ps;
+            });
+        } else {
+            String sql = "update test set name=?, file=? where id=1";
+            jdbcTemplate.update(con -> {
+                System.out.println(con.getClass().getName());
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setObject(1, "name2");
+                ps.setObject(2, new ByteArrayInputStream(bs));
+                return ps;
+            });
+        }
+    }
+
+    public void http(int c, int n) {
+        restTemplate.getForObject("http://127.0.0.1:8003/mysql8/test?c=" + c + "&n=" + n, String.class);
     }
 
 }

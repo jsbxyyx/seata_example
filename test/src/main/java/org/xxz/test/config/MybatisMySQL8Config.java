@@ -1,6 +1,6 @@
 package org.xxz.test.config;
 
-import io.seata.rm.datasource.DataSourceProxy;
+import org.apache.seata.rm.datasource.DataSourceProxy;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.transaction.SpringManagedTransactionFactory;

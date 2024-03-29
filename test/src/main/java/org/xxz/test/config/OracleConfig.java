@@ -1,7 +1,7 @@
 package org.xxz.test.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import io.seata.rm.datasource.DataSourceProxy;
+import org.apache.seata.rm.datasource.DataSourceProxy;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,15 +28,15 @@ public class OracleConfig implements ApplicationContextAware {
     private ApplicationContext ac;
 
     @Bean("oracleds")
-    public DruidDataSource oracleds() {
+    public DataSource oracleds() {
         DruidDataSource druidDataSource = new DruidDataSource();
         setDruidDataSourceProperties(druidDataSource, "oracle");
         return druidDataSource;
     }
 
     @Bean("oracledsp")
-    public DataSourceProxy oracledsp(@Autowired @Qualifier("oracleds") DruidDataSource druidDataSource) {
-        return new DataSourceProxy(druidDataSource);
+    public DataSourceProxy oracledsp(@Autowired @Qualifier("oracleds") DataSource dataSource) {
+        return new DataSourceProxy(dataSource);
     }
 
     @Bean("oraclejdbcTemplate")

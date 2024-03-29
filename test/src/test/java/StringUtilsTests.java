@@ -1,6 +1,6 @@
 import com.alibaba.fastjson.JSON;
 import io.seata.common.util.StringUtils;
-import io.seata.core.protocol.HeartbeatMessage;
+import org.apache.seata.core.protocol.HeartbeatMessage;
 import org.junit.Test;
 
 /**

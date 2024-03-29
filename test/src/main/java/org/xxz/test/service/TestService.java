@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
+import org.xxz.test.controller.Mysql8Controller;
 import org.xxz.test.dao.Test1;
 import org.xxz.test.dao.Test1Mapper;
 import org.xxz.test.dao.TestUuid;
@@ -23,6 +24,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,6 +64,9 @@ public class TestService {
 
     @Resource
     private CommonService commonService;
+
+    @Resource
+    private Mysql8Service mysql8Service;
 
     @GlobalTransactional
     public void test1() {
@@ -226,5 +231,16 @@ public class TestService {
         System.out.println("affected:" + affected);
     }
 
+    @GlobalTransactional(timeoutMills = 5 * 60000)
+    public void test12() {
+        jdbcTemplate.update(conn -> {
+            PreparedStatement ps = conn.prepareStatement("update test1 set name=? where id=?");
+            ps.setObject(1, "name");
+            ps.setObject(2, 1);
+            return ps;
+        });
+        mysql8Service.http(6, 1);
+        commonService.error();
+    }
 }
 

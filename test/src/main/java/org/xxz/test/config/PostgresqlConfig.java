@@ -1,7 +1,7 @@
 package org.xxz.test.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import io.seata.rm.datasource.DataSourceProxy;
+import org.apache.seata.rm.datasource.DataSourceProxy;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,15 +28,15 @@ public class PostgresqlConfig implements ApplicationContextAware {
     private ApplicationContext ac;
 
     @Bean("postgresqlds")
-    public DruidDataSource postgresqlds() {
+    public DataSource postgresqlds() {
         DruidDataSource druidDataSource = new DruidDataSource();
         setDruidDataSourceProperties(druidDataSource, "postgresql");
         return druidDataSource;
     }
 
     @Bean("postgresqldsp")
-    public DataSourceProxy postgresqldsp(@Autowired @Qualifier("postgresqlds") DruidDataSource druidDataSource) {
-        return new DataSourceProxy(druidDataSource);
+    public DataSourceProxy postgresqldsp(@Autowired @Qualifier("postgresqlds") DataSource dataSource) {
+        return new DataSourceProxy(dataSource);
     }
 
     @Bean("postgresqljdbcTemplate")

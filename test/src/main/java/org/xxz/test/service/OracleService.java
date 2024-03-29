@@ -1,7 +1,7 @@
 package org.xxz.test.service;
 
-import io.seata.common.util.IOUtil;
-import io.seata.spring.annotation.GlobalTransactional;
+import org.apache.seata.common.util.IOUtil;
+import org.apache.seata.spring.annotation.GlobalTransactional;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;

@@ -82,4 +82,10 @@ public class TestController {
         testService.test11();
         return "success";
     }
+
+    @RequestMapping("/test12")
+    public String test12() {
+        testService.test12();
+        return "success";
+    }
 }

@@ -32,7 +32,7 @@ public class CommonService {
         restTemplate.getForObject("http://127.0.0.1:8003/common/error?error=1", String.class);
     }
 
-    @GlobalTransactional
+    @GlobalTransactional(timeoutMills = 5 * 60000)
 //    @Transactional(transactionManager = "mysqlTM")
     public void doError(int n) {
         jdbcTemplate.update("update test1 set id = ?, name = ? where id = ?", new Object[]{9, "xx", 9});

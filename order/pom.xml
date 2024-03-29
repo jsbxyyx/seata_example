@@ -29,7 +29,7 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.seata</groupId>
+            <groupId>${seata.group}</groupId>
             <artifactId>seata-all</artifactId>
         </dependency>
         <dependency>

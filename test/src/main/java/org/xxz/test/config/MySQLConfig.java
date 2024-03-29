@@ -1,7 +1,7 @@
 package org.xxz.test.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import io.seata.rm.datasource.DataSourceProxy;
+import org.apache.seata.rm.datasource.DataSourceProxy;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,15 +28,15 @@ public class MySQLConfig implements ApplicationContextAware {
     private ApplicationContext ac;
 
     @Bean("mysqlds")
-    public DruidDataSource mysqlds() {
+    public DataSource mysqlds() {
         DruidDataSource druidDataSource = new DruidDataSource();
         setDruidDataSourceProperties(druidDataSource, "mysql");
         return druidDataSource;
     }
 
     @Bean("mysqldsp")
-    public DataSourceProxy mysqldsp(@Autowired @Qualifier("mysqlds") DruidDataSource druidDataSource) {
-        return new DataSourceProxy(druidDataSource);
+    public DataSourceProxy mysqldsp(@Autowired @Qualifier("mysqlds") DataSource dataSource) {
+        return new DataSourceProxy(dataSource);
     }
 
     @Bean("mysqljdbcTemplate")

@@ -1,6 +1,6 @@
 package org.xxz.test;
 
-import io.seata.common.util.IOUtil;
+import org.apache.seata.common.util.IOUtil;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
